@@ -19,7 +19,19 @@ async function startApolloServer() {
     res.json({ msg: "Welcome! Go to /graphql"})
   })
 
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({ typeDefs, resolvers,
+    playground: {
+      settings: {
+        'editor.theme': 'light',
+      },
+      tabs: [
+        {
+          endpoint,
+          query: defaultQuery,
+        },
+      ],
+    },
+  });
   await server.start();
   server.applyMiddleware({ app });
 
