@@ -5,9 +5,9 @@ const connectDB = async () => {
       process.env.MONGO_URI,
       {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true,
       })
-  console.log(`mongo connected `)
 }
 
 module.exports = { connectDB }
