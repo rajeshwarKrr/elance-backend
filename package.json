@@ -22,7 +22,10 @@
     "graphql": "^15.5.1",
     "graphql-tools": "^7.0.5",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.15"
+    "mongoose": "^5.12.15",
+    "passport": "^0.4.1",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.0.1",
