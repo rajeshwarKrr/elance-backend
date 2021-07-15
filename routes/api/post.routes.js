@@ -4,5 +4,6 @@ const router = express.Router({ mergeParams : true });
 const postControllers = require('../../controllers/posts.controllers')
 
 router.get('/getAllPosts', postControllers.getAllPosts);
+router.post('/createPost', postControllers.createPost)
 
 module.exports = router;

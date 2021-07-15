@@ -44,7 +44,7 @@ const createPost = async (req, res) => {
     })
 
     post.save()
-        .then((result) => {
+        .then(async (result) => {
             const {
                 _id,
                 projectTitle,
@@ -60,13 +60,22 @@ const createPost = async (req, res) => {
                 duration,
             } = result
 
-            const userPosts = User.find({_id: postedBy})
-                                    .select({posts: 1})
-            console.log(userPosts)
+            const user = await User
+                                .findOneAndUpdate(
+                                    {_id: postedBy}, 
+                                    {$push: { posts: _id } }
+                                )
+                                .exec()
+            res.status(200).json({
+                message: "Post added",
+                title: projectTitle,
+                user: user.userName
+            })
 
         })
 }
 
 module.exports = {
     getAllPosts,
+    createPost
 }

@@ -28,8 +28,16 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     duration: {
-        from: Date,
-        to: Date,
+        from: {
+            type: String, 
+            trim: true, 
+            default: ''
+        },
+        to: {
+            type: String, 
+            trim: true, 
+            default: ''
+        },
     }, 
     visibility: [{
         type: String,

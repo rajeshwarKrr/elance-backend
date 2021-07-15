@@ -14,9 +14,6 @@ corsOptions = {
     'origin': '*'
 };
 
-const { Post } = require("./models")
-
-console.log(Post.find())
 dotenv.config()
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
