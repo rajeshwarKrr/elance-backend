@@ -42,3 +42,30 @@
         "portfolioProjects": [],
         "reviews": []
     }
+
+/api/posts/createPost
+    POST
+    Body - 
+    {    
+        "projectTitle": "Project Title 6",
+        "description": "Project Description 6",
+        "skills": ["javascript", "nodejs", "reactjs"],
+        "education": ["MTech", "Btech"],
+        "workLocation": ["remote", "onsite"],
+        "softwareRequirements": ["4gb", "windows", "linux"],
+        "freelancersCount": 2,
+        "visibility": ["one", "two", "three"],
+        "postedBy": "60efa62ea041ba33f7d5d653",
+        "budget": {
+            "minPrice": 200,
+            "maxPrice": 700,
+            "currency": "rupee"
+        },
+        "duration": {
+            "from": "30-07-2021", 
+            "to": "30-08-2021"
+        }
+    }
+
+/api/posts/getAllPosts
+    Get

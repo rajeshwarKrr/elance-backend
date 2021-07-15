@@ -3,15 +3,18 @@ const mongoose  = require('mongoose')
 const { User, Post} = require("../models")
 
 const getAllPosts = async (req, res) => {
-    const posts = await Post.find({})
-            .populate('user')
-            // .then((result) => "hello")
-  
-        res.status(200).json({
-            message: "posts list",
-            posts
-        })
-    
+    const posts = await Post.find()
+            .populate({
+                path: "postedBy", 
+                model: "user", 
+                select: { userName: 1}
+            }).lean()
+    // console.log(posts)
+
+    res.status(200).json({
+        message: "posts list",
+        posts 
+    })
 }
 
 const createPost = async (req, res) => {
