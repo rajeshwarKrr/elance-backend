@@ -158,12 +158,16 @@ const userSchema = new mongoose.Schema({
       }
     }
   ],
-  posts: [
+  projects: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "post"
+      ref: "project"
     }
-  ]
+  ], 
+  applied: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "project"
+  }]
 },
 { timestamps: true }
 )

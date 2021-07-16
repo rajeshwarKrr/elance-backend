@@ -43,7 +43,7 @@
         "reviews": []
     }
 
-/api/posts/createPost
+/api/projects/createProject
     POST
     Body - 
     {    
@@ -67,5 +67,5 @@
         }
     }
 
-/api/posts/getAllPosts
+/api/projects/getAllProjects
     Get

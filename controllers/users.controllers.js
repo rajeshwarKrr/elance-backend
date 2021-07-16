@@ -4,9 +4,19 @@ const User = require("../models/User");
 const getAllUsers = async (req, res) => {
   const users = await User.find();
   if (users) {
+    const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
+      .reduce((a, c) => [...new Set([...a, c.name])], [])
+
+    const userType = users.reduce((a, c) => [...new Set([...a, c.userType])], [])
+
     res.status(200).json({
       message: "Users List",
-      users
+      users,
+      filter: {
+        skills,
+        // qualifications, 
+        userType,
+      }
     })
   } else {
     res.status(400).json({
@@ -35,7 +45,7 @@ const registerUser = async (req, res) => {
         })
 
         user.save()
-          .then(async ({ _id, 
+          .then(async ({ _id,
             fullName,
             firstName,
             lastName,
@@ -96,7 +106,7 @@ const registerUser = async (req, res) => {
       })
     })
 }
-// User.findById(args.id)
+
 const findByEmail = async (req, res) => {
   const { email } = req.body;
   console.log("email", email)

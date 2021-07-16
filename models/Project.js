@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const postSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
     projectTitle: {
         type: String,
         required: true,
@@ -29,12 +29,12 @@ const postSchema = new mongoose.Schema({
     },
     duration: {
         from: {
-            type: String, 
+            type: Date, 
             trim: true, 
             default: ''
         },
         to: {
-            type: String, 
+            type: Date, 
             trim: true, 
             default: ''
         },
@@ -50,8 +50,12 @@ const postSchema = new mongoose.Schema({
     postedBy: {
         type: mongoose.Schema.ObjectId,
         ref: "user"
-    }
+    },
+    appliedBy: [{
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
+    }]
 })
 
 
-module.exports = mongoose.model("post", postSchema)
+module.exports = mongoose.model("project", projectSchema)
