@@ -69,3 +69,18 @@
 
 /api/projects/getAllProjects
     Get
+
+/api/projects/getAllAppliedProjects
+    Get
+/api/projects/applyProject
+    Post
+   Body -
+   {
+    "projectId": "60f1b2faf979f66fb1ff659b",
+    "userId": "60f1b05ef979f66fb1ff6571",
+    "description": "can do  Description",
+    "bid": 300,
+    "duration": 20,
+    "coverLetter": "applicaiton coverletter",
+    "attachmentLinks": ["linnk1", "link2"]
+    }
