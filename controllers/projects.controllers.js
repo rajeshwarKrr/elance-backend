@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { User, Project } = require("../models")
+const { User, Project, Application } = require("../models")
 
 const getAllProjects = async (req, res) => {
     const projects = await Project.find()
@@ -8,8 +8,18 @@ const getAllProjects = async (req, res) => {
             path: "postedBy",
             model: "user",
             select: { userName: 1 }
-        }).lean()
-        
+        })
+        .populate({
+            path: "appliedBy.userId",
+            model: "user",
+            select: { userName: 1 }
+        })
+        .populate({
+            path: "appliedBy.applicationId",
+            model: "application",
+            select: { description: 1 }
+        })
+
     const skills = projects.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
     const education = projects.reduce((a, c) => [...new Set([...a, ...c.education])], [])
     const visibility = projects.reduce((a, c) => [...new Set([...a, ...c.visibility])], [])
@@ -87,7 +97,89 @@ const createProject = async (req, res) => {
         })
 }
 
+const applyProject = async (req, res) => {
+    const {
+        projectId,
+        userId,
+        description,
+        bid,
+        duration,
+        coverLetter,
+        attachmentLinks,
+    } = req.body;
+
+    const application = new Application({
+        projectId,
+        userId,
+        description,
+        bid,
+        duration,
+        coverLetter,
+        attachmentLinks
+    })
+
+    application.save()
+        .then(async ({ _id, projectId, userId }) => {
+            const user = await User
+                .findOneAndUpdate(
+                    { _id: userId },
+                    {
+                        $push: {
+                            applications: {
+                                projectId,
+                                applicationId: _id
+                            }
+                        }
+                    }
+                ).exec()
+            const project = await Project
+                .findOneAndUpdate(
+                    { _id: projectId },
+                    {
+                        $push: {
+                            appliedBy: {
+                                userId,
+                                applicationId: _id
+                            }
+                        }
+                    }
+                ).exec()
+
+            res.status(200).json({
+                message: "Project Applied",
+                userId,
+                user: user.userName,
+                projectId,
+                projectTitle: project.projectTitle,
+                applicationId: _id,
+            })
+        })
+}
+
+const getAllAppliedProjects = async (req, res) => {
+    const applications = await Application.find()
+        .populate({
+            path: "projectId",
+            model: "project",
+            select: { projectTitle: 1 }
+        })
+        .populate({
+            path: "userId",
+            model: "user",
+            select: { userName: 1, "skills.name": 1 }
+        })
+
+    res.status(200).json({
+        message: "All Applied Projects",
+        applications,
+        
+    })
+    
+}
+
 module.exports = {
     getAllProjects,
-    createProject
+    createProject,
+    applyProject,
+    getAllAppliedProjects
 }

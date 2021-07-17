@@ -164,9 +164,15 @@ const userSchema = new mongoose.Schema({
       ref: "project"
     }
   ], 
-  applied: [{
-    type: mongoose.Schema.ObjectId,
-    ref: "project"
+  applications: [{
+    projectId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "project"
+    }, 
+    applicationId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "application"
+    }
   }]
 },
 { timestamps: true }
