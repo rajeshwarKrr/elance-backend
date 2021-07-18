@@ -1,12 +1,32 @@
 const mongoose = require("mongoose")
-const User = require("../models/User");
+const { User } = require("../models");
+const { pagination, queryConditions } = require("../services/request.service")
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find();
-  if(users) {
+  const { page = 1, size = 10 } = req.query;
+
+  const { limit, skip } = pagination({page, size})
+
+  const conditions = queryConditions(req.body);
+
+  const users = await User.find({
+    ...conditions
+  }, {}, {limit, skip});
+
+  if (users) {
+    const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
+      .reduce((a, c) => [...new Set([...a, c.name])], [])
+
+    const userType = users.reduce((a, c) => [...new Set([...a, c.userType])], [])
+
     res.status(200).json({
       message: "Users List",
-      users
+      users,
+      filter: {
+        skills,
+        // qualifications, 
+        userType,
+      }
     })
   } else {
     res.status(400).json({
@@ -15,64 +35,94 @@ const getAllUsers = async (req, res) => {
   }
 }
 
-const register = async (req, res) => {
+const registerUser = async (req, res) => {
   const {
-    username,
     email,
-    password,
-    displayName
+    userName,
+    ...rest
   } = req.body
 
-  User.find({ email})
-  .exec()
-  .then((user) => {
-    if(user.length >= 1) {
-      res.status(409).json({
-        message: "email exists"
-      })
-    } else {
-      const user = new User({
-        username,
-        email,
-        password,
-        displayName
-      })
+  User.find({ email })
+    .exec()
+    .then((user) => {
+      if (user.length >= 1) {
+        res.status(409).json({
+          message: "email exists"
+        })
+      } else {
+        const user = new User({
+          email, userName, ...rest
+        })
 
-      user.save()
-        .then(async (result) => {
-          console.log('user saved')
-          res.status(201).json({
-            userDetails: {
-              id: result._id,
-              username:result.username,
-              email:result.email,
-              password:result.password,
-              displayName:result.displayName
-            }
+        user.save()
+          .then(async ({ _id,
+            fullName,
+            firstName,
+            lastName,
+            email,
+            userName,
+            userType,
+            occupation,
+            intro,
+            profilePic,
+            phoneNumber,
+            address,
+            website,
+            resume,
+            socialProfiles,
+            qualifications,
+            works,
+            skills,
+            portfolioProjects,
+            reviews }) => {
+            console.log('user saved')
+            res.status(201).json({
+              userDetails: {
+                id: _id,
+                fullName,
+                firstName,
+                lastName,
+                email,
+                userName,
+                userType,
+                occupation,
+                intro,
+                profilePic,
+                phoneNumber,
+                address,
+                website,
+                resume,
+                socialProfiles,
+                qualifications,
+                works,
+                skills,
+                portfolioProjects,
+                reviews
+              }
+            })
           })
-        })
-        .catch((err) => {
-          console.log("something went wrong",err)
-          res.status(400).json({
-            message: err.toString()
+          .catch((err) => {
+            console.log("something went wrong", err)
+            res.status(400).json({
+              message: err.toString()
+            })
           })
-        })
-    }
-  })
-  .catch((err) => {
-    console.log("something went wrong",err)
-    res.status(400).json({
-      message: err.toString()
+      }
     })
-  })
-}
-// User.findById(args.id)
+    .catch((err) => {
+      console.log("something went wrong", err)
+      res.status(400).json({
+        message: err.toString()
+      })
+    })
+}   
+
 const findByEmail = async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.body;
   console.log("email", email)
   const user = await User.find({ email }).exec()
   console.log("user", user);
-  if(user.length) {
+  if (user.length) {
     res.status(200).json({
       message: "User Found",
       user,
@@ -87,6 +137,6 @@ const findByEmail = async (req, res) => {
 
 module.exports = {
   getAllUsers,
-  register,
+  registerUser,
   findByEmail,
 }
