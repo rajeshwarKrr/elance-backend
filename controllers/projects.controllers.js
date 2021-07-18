@@ -1,13 +1,17 @@
 const mongoose = require('mongoose')
 
 const { User, Project, Application } = require("../models")
+const { pagination, queryConditions } = require("../services/request.service")
+
 
 const getAllProjects = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
-    const limit = parseInt(size)
-    const skip = (page - 1) * size;
-  
-    const projects = await Project.find({}, {}, {limit, skip})
+    const { limit, skip } = pagination({ page, size })
+
+    const conditions = queryConditions(req.body);
+
+
+    const projects = await Project.find({ ...conditions }, {}, { limit, skip })
         .populate({
             path: "postedBy",
             model: "user",
@@ -162,10 +166,12 @@ const applyProject = async (req, res) => {
 
 const getAllAppliedProjects = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
-    const limit = parseInt(size)
-    const skip = (page - 1) * size;
+
+    const { limit, skip } = pagination({page, size})
+
+    const conditions = queryConditions(req.body);
   
-    const applications = await Application.find({}, {}, {limit, skip})
+    const applications = await Application.find({...conditions}, {}, { limit, skip })
         .populate({
             path: "projectId",
             model: "project",
@@ -180,9 +186,9 @@ const getAllAppliedProjects = async (req, res) => {
     res.status(200).json({
         message: "All Applied Projects",
         applications,
-        
+
     })
-    
+
 }
 
 module.exports = {
