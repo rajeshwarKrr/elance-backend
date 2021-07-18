@@ -1,8 +1,12 @@
 const mongoose = require("mongoose")
-const User = require("../models/User");
+const { User } = require("../models");
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find();
+  const { page = 1, size = 10 } = req.query;
+  const limit = parseInt(size)
+  const skip = (page - 1) * size;
+
+  const users = await User.find({}, {}, {limit, skip});
   if (users) {
     const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
       .reduce((a, c) => [...new Set([...a, c.name])], [])
@@ -105,7 +109,7 @@ const registerUser = async (req, res) => {
         message: err.toString()
       })
     })
-}
+}   
 
 const findByEmail = async (req, res) => {
   const { email } = req.body;

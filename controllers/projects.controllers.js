@@ -3,7 +3,11 @@ const mongoose = require('mongoose')
 const { User, Project, Application } = require("../models")
 
 const getAllProjects = async (req, res) => {
-    const projects = await Project.find()
+    const { page = 1, size = 10 } = req.query;
+    const limit = parseInt(size)
+    const skip = (page - 1) * size;
+  
+    const projects = await Project.find({}, {}, {limit, skip})
         .populate({
             path: "postedBy",
             model: "user",
@@ -157,7 +161,11 @@ const applyProject = async (req, res) => {
 }
 
 const getAllAppliedProjects = async (req, res) => {
-    const applications = await Application.find()
+    const { page = 1, size = 10 } = req.query;
+    const limit = parseInt(size)
+    const skip = (page - 1) * size;
+  
+    const applications = await Application.find({}, {}, {limit, skip})
         .populate({
             path: "projectId",
             model: "project",
