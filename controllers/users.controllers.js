@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const { User } = require("../models");
 const { pagination, queryConditions } = require("../services/request.service")
 
@@ -7,11 +6,12 @@ const getAllUsers = async (req, res) => {
 
   const { limit, skip } = pagination({page, size})
 
-  const conditions = queryConditions(req.body);
+  const conditions = queryConditions(req.body, Object.keys(User.schema.obj));
 
   const users = await User.find({
     ...conditions
   }, {}, {limit, skip});
+
 
   if (users) {
     const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])

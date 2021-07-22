@@ -62,6 +62,12 @@ const projectSchema = new mongoose.Schema({
                 ref: "application"
             },
         }
+    ],
+    favByUsers: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "user"      
+        }
     ]
 })
 

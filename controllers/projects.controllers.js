@@ -8,7 +8,7 @@ const getAllProjects = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
     const { limit, skip } = pagination({ page, size })
 
-    const conditions = queryConditions(req.body);
+    const conditions = queryConditions(req.body, Object.keys(Project.schema.obj));
 
 
     const projects = await Project.find({ ...conditions }, {}, { limit, skip })
@@ -169,7 +169,7 @@ const getAllAppliedProjects = async (req, res) => {
 
     const { limit, skip } = pagination({page, size})
 
-    const conditions = queryConditions(req.body);
+    const conditions = queryConditions(req.body, Object.keys(Application.schema.obj));
   
     const applications = await Application.find({...conditions}, {}, { limit, skip })
         .populate({
