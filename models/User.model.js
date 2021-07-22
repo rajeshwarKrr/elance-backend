@@ -173,7 +173,25 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: "application"
     }
-  }]
+  }], 
+  favUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user"
+    }
+  ], 
+  favProjects: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "project"  
+    }
+  ],
+  favByUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user"
+    }
+  ]
 },
 { timestamps: true }
 )

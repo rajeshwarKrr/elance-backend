@@ -6,10 +6,12 @@ const pagination = ({page, size}) => {
     return ({limit, skip})
 }
 
-const queryConditions = (bodyObj) => {
+const queryConditions = (bodyObj, keys = []) => {
     const conditions = {};
-    for(let key of Object.keys(bodyObj)) {
-        conditions[key] = bodyObj[key]
+
+    for(let key of keys) {
+        if(bodyObj[key])
+            conditions[key] = bodyObj[key]
     }
     return conditions;
 }
