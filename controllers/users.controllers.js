@@ -4,13 +4,13 @@ const { pagination, queryConditions } = require("../services/request.service")
 const getAllUsers = async (req, res) => {
   const { page = 1, size = 10 } = req.query;
 
-  const { limit, skip } = pagination({page, size})
+  const { limit, skip } = pagination({ page, size })
 
   const conditions = queryConditions(req.body, Object.keys(User.schema.obj));
 
   const users = await User.find({
     ...conditions
-  }, {}, {limit, skip});
+  }, {}, { limit, skip });
 
 
   if (users) {
@@ -115,7 +115,7 @@ const registerUser = async (req, res) => {
         message: err.toString()
       })
     })
-}   
+}
 
 const findByEmail = async (req, res) => {
   const { email } = req.body;
@@ -135,8 +135,71 @@ const findByEmail = async (req, res) => {
 
 }
 
+const setReview = async (req, res) => {
+  const {
+    userId,
+    reviewedBy,
+    title,
+    description,
+    rating,
+  } = req.body;
+
+  await User.findByIdAndUpdate(
+    userId,
+    {
+      $push: {
+        reviews: {
+          reviewedBy,
+          title,
+          description,
+          rating,
+        }
+      }
+    }).then(async (result1) => {
+      await User.findByIdAndUpdate(reviewedBy, {
+        $push: {
+          reviewed: result1._id
+        }
+      }).then((result2) => {
+        res.status(200).json({
+          message: "Review Added",
+          title,
+          description,
+          rating,
+          reviewedBy: result2.email,
+          user: result1
+        })
+      })
+    })
+}
+
+const getUserReviews = async (req, res) => {
+  const { userId } = req.body;
+  const userReviews = await User.findById(userId, {
+    email: 1,
+    reviews: 1,
+  }).populate({
+    path: "reviews.reviewedBy",
+    model: "user",
+    select: {
+      _id: 1,
+      userName: 1,
+      reviewed: 1
+    }
+  }).then((result) => {
+    res.status(200).json({
+      message: "Reviews of User",
+      reviews: result,
+      userId: result._id,
+    })
+  })
+}
+
+
 module.exports = {
   getAllUsers,
   registerUser,
   findByEmail,
+  setReview,
+  getUserReviews,
 }

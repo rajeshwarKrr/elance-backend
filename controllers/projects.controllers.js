@@ -78,16 +78,7 @@ const createProject = async (req, res) => {
             const {
                 _id,
                 projectTitle,
-                description,
-                skills,
-                education,
-                workLocation,
-                softwareRequirements,
-                freelancersCount,
-                visibility,
                 postedBy,
-                budget,
-                duration,
             } = result
 
             const user = await User

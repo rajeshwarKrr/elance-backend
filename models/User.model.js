@@ -149,13 +149,29 @@ const userSchema = new mongoose.Schema({
   ],
   reviews: [
     {
-      title: String, 
-      description: String, 
-      rating: Number,
-      reviewBy: {
+      title: {
+        type: String,
+        required: true,
+      }, 
+      description: {
+        type: String,
+        required: true,
+      },  
+      rating: {
+        type: Number,
+        required: true,
+      }, 
+      reviewedBy: {
         type: mongoose.Schema.ObjectId,
-        ref: "user"
+        ref: "user",
+        required: true,
       }
+    }
+  ],
+  reviewed: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
     }
   ],
   projects: [
