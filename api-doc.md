@@ -84,3 +84,38 @@
     "coverLetter": "applicaiton coverletter",
     "attachmentLinks": ["linnk1", "link2"]
     }
+
+api/favourites/setFavUser : POST: 
+====body====
+    favouriteUserId, 
+    userId
+=================
+api/favourites/unSetFavUser : POST: 
+====body====
+    favouriteUserId, 
+    userId
+=================
+
+api/favourites/getAllFavUsers : GET: 
+====body====
+    userId
+=================
+
+api/favourites/setFavProject : POST: 
+====body====
+    favProjectId, 
+    userId
+=================
+api/users/setReview : POST: 
+====body====
+    userId,
+    reviewedBy,
+    title,
+    description,
+    rating,
+=================
+
+api/users/getUserReviews: GET
+========body======
+userId
+============
