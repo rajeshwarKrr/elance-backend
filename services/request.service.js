@@ -9,10 +9,11 @@ const pagination = ({page, size}) => {
 const queryConditions = (bodyObj, keys = []) => {
     const conditions = {};
 
-    for(let key of keys) {
+    for(let key of ["_id", ...keys]) {
         if(bodyObj[key])
             conditions[key] = bodyObj[key]
     }
+    
     return conditions;
 }
 
