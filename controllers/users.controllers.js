@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const { pagination, queryConditions } = require("../services/request.service")
+const { readNotificationService } = require("../services/notification.service");
 
 const getAllUsers = async (req, res) => {
   const { page = 1, size = 10 } = req.query;
@@ -10,7 +11,12 @@ const getAllUsers = async (req, res) => {
 
   const users = await User.find({
     ...conditions
-  }, {}, { limit, skip });
+  }, {}, { limit, skip })
+  .populate({
+    path: "notifications",
+    model: "notification",
+  });
+
   const count = await User.find({...conditions}).count()
   const totalPages = count/size;
 
@@ -200,6 +206,19 @@ const getUserReviews = async (req, res) => {
   })
 }
 
+const readNotification = async (req, res) => {
+  const { notificationId,  userId } = req.body;
+
+  const notification = await readNotificationService({ notificationId,  userId });
+
+  res.status(200).json({
+    message: "Notification read success",
+    notificationId: notification._id,
+    userId: notification.notify
+  })
+
+}
+
 
 module.exports = {
   getAllUsers,
@@ -207,4 +226,5 @@ module.exports = {
   findByEmail,
   setReview,
   getUserReviews,
+  readNotification,
 }

@@ -15,18 +15,11 @@ const setFavUser = async (req, res) => {
             }
         }, {new : true}
     )
-
-
-
-    // .then((result) => {
-    //     console.log(result)
-        res.status(200).json({
-            message: "Favourite User Added",
-            userId: result._id,
-            favUsers: result.favUsers
-        })
-    // })
-    
+    res.status(200).json({
+        message: "Favourite User Added",
+        userId: result._id,
+        favUsers: result.favUsers
+    })
 }
 
 const unSetFavUser = async (req, res) => {

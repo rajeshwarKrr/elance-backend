@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
-const { User, Project, Application } = require("../models")
+const { User, Project, Application } = require("../models");
+const { setNotification } = require('../services/notification.service');
 const { pagination, queryConditions } = require("../services/request.service")
 
 
@@ -84,7 +85,8 @@ const createProject = async (req, res) => {
             const user = await User
                 .findOneAndUpdate(
                     { _id: postedBy },
-                    { $push: { projects: _id } }
+                    { $push: { projects: _id } },
+                    { new: true}
                 )
                 .exec()
             res.status(200).json({
@@ -119,7 +121,8 @@ const applyProject = async (req, res) => {
 
     application.save()
         .then(async ({ _id, projectId, userId }) => {
-            const user = await User
+            
+            const freelancer = await User
                 .findOneAndUpdate(
                     { _id: userId },
                     {
@@ -127,7 +130,7 @@ const applyProject = async (req, res) => {
                             applications: {
                                 projectId,
                                 applicationId: _id
-                            }
+                            }, 
                         }
                     }, {new : true}
                 ).exec()
@@ -141,16 +144,35 @@ const applyProject = async (req, res) => {
                                 applicationId: _id
                             }
                         }
-                    }
+                    }, { new: true }
                 ).exec()
 
+            const notification = await setNotification({
+                triggeredBy: freelancer._id,
+                notify: project.postedBy,
+                notificationMessage: `${project.projectTitle} applied by  `, 
+                projectId: project._id,
+                notificationType: "jobApplication"
+            })
+            console.log(notification)
+
+            const client = await User
+                    .findOneAndUpdate(
+                        { _id: project.postedBy }, 
+                        {
+                            $push: {
+                                notifications: notification._id,
+                            }
+                        }, { new: true }
+                    )
             res.status(200).json({
                 message: "Project Applied",
-                userId,
-                user: user.userName,
+                freelancerId: freelancer?._id,
+                freelancer: freelancer.userName,
                 projectId,
                 projectTitle: project.projectTitle,
                 applicationId: _id,
+                notificationId: notification._id
             })
         })
 }

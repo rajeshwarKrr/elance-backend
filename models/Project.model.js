@@ -68,8 +68,13 @@ const projectSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: "user"      
         }
-    ]
-})
+    ],
+    // hired: [
+    //     // userid
+    //     // applicationid
+    // ]
+},
+{ timestamps: true })
 
 
 module.exports = mongoose.model("project", projectSchema)

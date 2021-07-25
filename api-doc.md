@@ -119,3 +119,10 @@ api/users/getUserReviews: GET
 ========body======
 userId
 ============
+
+
+api/users/readNotification: POST
+========body======
+ "notificationId"
+    "userId"
+============

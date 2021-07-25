@@ -210,6 +210,12 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: "user"
     }
+  ], 
+  notifications: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "notification"
+    }
   ]
 },
 { timestamps: true }
