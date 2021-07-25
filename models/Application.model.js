@@ -20,15 +20,15 @@ const applicationSchema = new mongoose.Schema({
     }, 
     duration: {
         type: Number,
-        required: true,
+        // required: true,
     },
     coverLetter: {
         type: String, 
-        required: true,
+        // required: true,
     },
     attachmentLinks: [{
         type: String,
-        required: true,
+        // required: true,
     }],
 })
 

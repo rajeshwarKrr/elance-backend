@@ -96,14 +96,15 @@ const setFavProject = async (req, res) => {
     .then(async (result) => {
         await User.findByIdAndUpdate(userId,{
             $addToSet: {
-                favProjects: result._id   
+                favProjects: result?._id   
             }
-        }, {new : true}).then((result2) => {
+        }, {new : true})
+        .then((result2) => {
             res.status(200).json({
                 message: "Favourite Project Added",
-                projectId: result._id,
+                projectId: result?._id,
                 favByUsers: result.favByUsers,
-                favUser: result2._id
+                favUser: result2?._id
             })
         })
 
@@ -127,14 +128,14 @@ const unSetFavProject = async (req, res) => {
     .then(async (result) => {
         await User.findByIdAndUpdate(userId,{
             $pull: {
-                favProjects: result._id   
+                favProjects: result?._id   
             }
         }, {new : true}).then((result2) => {
             res.status(200).json({
                 message: "Favourite Project Added",
-                projectId: result._id,
+                projectId: result?._id,
                 favByUsers: result.favByUsers,
-                favUser: result2._id
+                favUser: result2?._id
             })
         })
 

@@ -49,15 +49,15 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true
   }, 
-  address: [{
-    type: String, 
-  }],
+  // address: [{
+  //   type: String, 
+  // }],
   website: {
     type: String,
   },
-  resume: {
-    type: String,
-  },
+  // resume: {
+  //   type: String,
+  // },
   socialProfiles: [{
     name: {
       type: String, 
@@ -70,79 +70,82 @@ const userSchema = new mongoose.Schema({
   }],
   qualifications: [
     {
-      school: {
-        type: String, 
-        required: true
-      },
+      // school: {
+      //   type: String, 
+      //   required: true
+      // },
       degree: {
         type: String, 
         required: true, 
       },
-      graduated: {
-          type: String, 
-          required: true, 
-      }, 
-      description: {
-        type: String, 
-        required: true,
-      }, 
-      from: {
-        type: Date,
-        required: true,
-      }, 
-      to: {
-        type: Date,
-        // required: true
-      }
+      // graduated: {
+      //     type: String, 
+      //     required: true, 
+      // }, 
+      // description: {
+      //   type: String, 
+      //   required: true,
+      // }, 
+      // from: {
+      //   type: Date,
+      //   required: true,
+      // }, 
+      // to: {
+      //   type: Date,
+      //   // required: true
+      // }
     }
   ],
-  works: [
-    {
-      company :{
-        type: String, 
-        required: true,
-      },
-      title: {
-        type: String, 
-        required: true
-      },
-      from: {
-        type: String, 
-        required: true
-      },
-      to: {
-        type: String, 
-        required: true,
-      },
-      description: {
-        type: String, 
-        required: true,
-      }, 
-      currentCompany: {
-        type: Boolean, 
-        required: true,
-        enum: [ true, false ],
-        default: false
-      }
-    }
-  ],
+  // works: [
+  //   {
+  //     company :{
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     title: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     from: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     to: {
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     description: {
+  //       type: String, 
+  //       required: true,
+  //     }, 
+  //     currentCompany: {
+  //       type: Boolean, 
+  //       required: true,
+  //       enum: [ true, false ],
+  //       default: false
+  //     }
+  //   }
+  // ],
   skills: [
     {
       name: {
         type: String, 
         required: true
       }, 
-      level: {
-        type: String, 
-        required: true
-      }
+      // level: {
+      //   type: String, 
+      //   required: true
+      // }
     }
   ],
   portfolioProjects: [
     {
       title: String,
-      category: String,
+      // category: String,
       description: String,
+      skills: [{
+        type: String
+      }],
       image_url: String,
       project_url: String
     }
