@@ -129,7 +129,7 @@ const applyProject = async (req, res) => {
                                 applicationId: _id
                             }
                         }
-                    }
+                    }, {new : true}
                 ).exec()
             const project = await Project
                 .findOneAndUpdate(

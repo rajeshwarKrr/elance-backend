@@ -11,7 +11,8 @@ const getAllUsers = async (req, res) => {
   const users = await User.find({
     ...conditions
   }, {}, { limit, skip });
-
+  const count = await User.find({...conditions}).count()
+  const totalPages = count/size;
 
   if (users) {
     const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
@@ -22,6 +23,8 @@ const getAllUsers = async (req, res) => {
     res.status(200).json({
       message: "Users List",
       users,
+      page,
+      totalPages,
       filter: {
         skills,
         // qualifications, 
@@ -155,12 +158,14 @@ const setReview = async (req, res) => {
           rating,
         }
       }
-    }).then(async (result1) => {
+    }, 
+    {new : true}
+    ).then(async (result1) => {
       await User.findByIdAndUpdate(reviewedBy, {
         $push: {
           reviewed: result1._id
         }
-      }).then((result2) => {
+      }, {new : true}).then((result2) => {
         res.status(200).json({
           message: "Review Added",
           title,
