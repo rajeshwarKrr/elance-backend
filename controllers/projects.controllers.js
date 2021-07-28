@@ -55,7 +55,7 @@ const createProject = async (req, res) => {
         softwareRequirements,
         freelancersCount,
         visibility,
-        postedBy = "current userID",
+        postedBy,
         budget,
         duration,
     } = req.body
