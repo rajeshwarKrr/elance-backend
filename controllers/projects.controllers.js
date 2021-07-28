@@ -92,7 +92,7 @@ const createProject = async (req, res) => {
             res.status(200).json({
                 message: "Project added",
                 title: projectTitle,
-                user: user.userName
+                user: user?.userName
             })
 
         })
