@@ -5,7 +5,7 @@ const favouritesControllers = require('../../controllers/favourites.controllers'
 
 router.post('/setFavUser', favouritesControllers.setFavUser);
 router.post('/unSetFavUser', favouritesControllers.unSetFavUser);
-router.get('/getAllFavUsers', favouritesControllers.getAllFavUsers);
+router.post('/getAllFavUsers', favouritesControllers.getAllFavUsers);
 
 router.post('/setFavProject', favouritesControllers.setFavProject);
 router.post('/unSetFavProject', favouritesControllers.unSetFavProject);
