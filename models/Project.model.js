@@ -3,15 +3,15 @@ const mongoose = require("mongoose");
 const projectSchema = new mongoose.Schema({
     projectTitle: {
         type: String,
-        required: true,
+//         required: true,
     },
     description: {
         type: String,
-        required: true,
+//         required: true,
     },
     skills: [{
         type: String,
-        required: true,
+//         required: true,
     }],
     education: [{
         type: String,
@@ -25,7 +25,7 @@ const projectSchema = new mongoose.Schema({
     }],
     freelancersCount: {
         type: Number,
-        required: true
+//         required: true
     },
     duration: {
         from: {
