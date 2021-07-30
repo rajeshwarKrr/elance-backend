@@ -9,6 +9,5 @@ router.post('/getAllFavUsers', favouritesControllers.getAllFavUsers);
 
 router.post('/setFavProject', favouritesControllers.setFavProject);
 router.post('/unSetFavProject', favouritesControllers.unSetFavProject);
-// router.get('/getAllFavProjects', )
 
 module.exports = router;

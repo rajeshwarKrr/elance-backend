@@ -13,14 +13,6 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         req: true
     }, // project applied "project title " by "user name"
-    date_added :{
-        type: Date,
-        default: Date.now
-    },
-    date_read :{
-        type: Date,
-        default: Date.now
-    },
     isRead :{
         type: Boolean, 
         default: false,
@@ -31,7 +23,7 @@ const notificationSchema = new mongoose.Schema({
     },
     notificationType: {
         type: String,
-        enum : ['jobApplication','hireRequest', 'review'],
+        enum : ['jobApplication','hireRequest', 'review', 'applicantHired', "applicantRejected", "agreeHireRequest", "rejectedHireRequest"],
         required: true,
     }
 },

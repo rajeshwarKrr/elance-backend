@@ -70,72 +70,18 @@ const userSchema = new mongoose.Schema({
   }],
   qualifications: [
     {
-      // school: {
-      //   type: String, 
-      //   required: true
-      // },
       degree: {
         type: String, 
         required: true, 
       },
-      // graduated: {
-      //     type: String, 
-      //     required: true, 
-      // }, 
-      // description: {
-      //   type: String, 
-      //   required: true,
-      // }, 
-      // from: {
-      //   type: Date,
-      //   required: true,
-      // }, 
-      // to: {
-      //   type: Date,
-      //   // required: true
-      // }
     }
   ],
-  // works: [
-  //   {
-  //     company :{
-  //       type: String, 
-  //       required: true,
-  //     },
-  //     title: {
-  //       type: String, 
-  //       required: true
-  //     },
-  //     from: {
-  //       type: String, 
-  //       required: true
-  //     },
-  //     to: {
-  //       type: String, 
-  //       required: true,
-  //     },
-  //     description: {
-  //       type: String, 
-  //       required: true,
-  //     }, 
-  //     currentCompany: {
-  //       type: Boolean, 
-  //       required: true,
-  //       enum: [ true, false ],
-  //       default: false
-  //     }
-  //   }
-  // ],
   skills: [
     {
       name: {
         type: String, 
         required: true
       }, 
-      // level: {
-      //   type: String, 
-      //   required: true
-      // }
     }
   ],
   portfolioProjects: [
@@ -191,8 +137,24 @@ const userSchema = new mongoose.Schema({
     applicationId: {
       type: mongoose.Schema.ObjectId,
       ref: "application"
-    }
+    },
   }], 
+  hireRequests: [
+    {
+      projectId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "project"
+      }, 
+      clientId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
+      },
+      hireRequestId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "hireRequest"
+      }, 
+    }
+  ],
   favUsers: [
     {
       type: mongoose.Schema.ObjectId,
@@ -216,9 +178,70 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: "notification"
     }
-  ]
+  ], 
 },
 { timestamps: true }
 )
 
 module.exports = mongoose.model("user", userSchema);
+
+
+
+// qualifications: [
+//   {
+//     // school: {
+//     //   type: String, 
+//     //   required: true
+//     // },
+//     degree: {
+//       type: String, 
+//       required: true, 
+//     },
+//     // graduated: {
+//     //     type: String, 
+//     //     required: true, 
+//     // }, 
+//     // description: {
+//     //   type: String, 
+//     //   required: true,
+//     // }, 
+//     // from: {
+//     //   type: Date,
+//     //   required: true,
+//     // }, 
+//     // to: {
+//     //   type: Date,
+//     //   // required: true
+//     // }
+//   }
+// ],
+  // works: [
+  //   {
+  //     company :{
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     title: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     from: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     to: {
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     description: {
+  //       type: String, 
+  //       required: true,
+  //     }, 
+  //     currentCompany: {
+  //       type: Boolean, 
+  //       required: true,
+  //       enum: [ true, false ],
+  //       default: false
+  //     }
+  //   }
+  // ],

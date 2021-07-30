@@ -14,8 +14,15 @@ const setNotification = async ({
         notificationMessage,
         projectId, 
         notificationType,
-    }).save();
-    return notification
+    })
+    const err = await notification.validateSync();
+    if(!err) {
+        await notification.save()
+        return notification
+    } else {
+        return err
+    }
+    // node mailer 
 }
 
 const readNotificationService = async ({ notificationId,  userId }) => {
@@ -24,7 +31,7 @@ const readNotificationService = async ({ notificationId,  userId }) => {
         notify: userId
     }, {
         isRead: true, 
-        date_read: Date.now()
+        updatedAt: Date.now()
     }, { new: true })
 
     return notification;

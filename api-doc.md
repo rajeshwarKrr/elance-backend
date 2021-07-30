@@ -77,30 +77,7 @@
 < can give anything from schema here >
 }
 ```
-***
-## /api/projects/getAllAppliedProjects
-###### GET : BODY
-```
-{
-    _id: <application id>
-    <can give anything from application schema>
-}
 
-```
-***
-## /api/projects/applyProject
-###### POST : BODY
-```
-{
-    "projectId": "60f1b2faf979f66fb1ff659b",
-    "userId": "60f1b05ef979f66fb1ff6571",
-    "description": "can do  Description",
-    "bid": 300,
-    "duration": 20,
-    "coverLetter": "applicaiton coverletter",
-    "attachmentLinks": ["linnk1", "link2"]
-}
-```
 ***
 ## api/favourites/setFavUser 
 ###### POST : BODY 
@@ -170,3 +147,85 @@
    "userId": <current user id>
 }
 ```
+***
+## /api/hire/getAllAppliedProjects
+###### POST : BODY
+```
+{
+    _id: <application id>
+    <can give anything from application schema>
+}
+
+```
+***
+## /api/hire/applyProject
+###### POST : BODY
+```
+{
+    "projectId": "60f1b2faf979f66fb1ff659b",
+    "userId": "60f1b05ef979f66fb1ff6571",
+    "description": "can do  Description",
+    "bid": 300,
+    "duration": 20,
+    "coverLetter": "applicaiton coverletter",
+    "attachmentLinks": ["linnk1", "link2"]
+}
+```
+***
+
+## /api/hire/hireApplicant
+###### POST : BODY
+```
+{
+    "applicationId" : "60fdba2b2d544172170ea525",
+    "clientId": "60f1b17bf979f66fb1ff6595"
+}
+```
+***
+## /api/hire/rejectApplicant
+###### POST : BODY
+```
+{
+    "applicationId" : "60fdba2b2d544172170ea525",
+    "clientId": "60f1b17bf979f66fb1ff6595"
+}
+```
+***
+
+## /api/hire/hireRequest
+###### POST : BODY
+```
+{
+    "projectId": "60f1b2faf979f66fb1ff659b",
+    "freelancerId": "60f1b05ef979f66fb1ff6571",
+    "clientId": "60f1b17bf979f66fb1ff6595",
+    "duration": 30,
+    "hourlyRate": 30,
+    "description": "hello"
+}
+```
+***
+## /api/hire/getAllHireRequests
+###### POST : BODY
+```
+{
+    "freelancerId": "60f1b05ef979f66fb1ff6571",
+}
+```
+***
+## /api/hire/agreeHireRequest
+###### POST : BODY
+```
+{
+    "hireRequestId": "61044df2481d76c01185bb3c"
+}
+```
+***
+## /api/hire/rejectHireRequest
+###### POST : BODY
+```
+{
+    "hireRequestId": "61044df2481d76c01185bb3c"
+}
+```
+***

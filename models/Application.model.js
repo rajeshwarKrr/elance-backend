@@ -30,6 +30,10 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         // required: true,
     }],
+    applicationStatus: {
+        type: String,
+        enum : ['rejected','hold', 'hired'],
+    },
 },
 { timestamps: true })
 

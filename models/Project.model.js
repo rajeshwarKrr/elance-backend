@@ -69,10 +69,36 @@ const projectSchema = new mongoose.Schema({
             ref: "user"      
         }
     ],
-    // hired: [
-    //     // userid
-    //     // applicationid
-    // ]
+    hireRequests: [
+        {
+            freelancerId : {
+                type: mongoose.Schema.ObjectId,
+                ref: "user"
+            },
+            hireRequest : {
+                type: mongoose.Schema.ObjectId,
+                ref: "hireRequest"
+            },
+        }
+        
+    ],
+    hired: [
+        {
+            freelancerId : {
+                type: mongoose.Schema.ObjectId,
+                ref: "user", 
+                unique: true,
+            },
+            applicationId: {
+                type: mongoose.Schema.ObjectId,
+                ref: "application"
+            },
+            hireRequestId: {
+                type: mongoose.Schema.ObjectId,
+                ref: "hireRequest"
+            }
+        }
+    ]
 },
 { timestamps: true })
 
