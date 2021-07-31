@@ -1,6 +1,103 @@
 
 const { HireRequest, Project, User,Application } = require("../models");
 const { setNotification } = require('./notification.service');
+const { pagination } = require("./utility.service");
+
+const applyProjectService = async (bodyArgs) => {
+    const application = new Application({
+        ...bodyArgs
+    })
+    const err = await application.validateSync()
+    
+    if(err) {
+        return ({
+            message: "Bad Request",
+            status: 400
+        })
+    } else {
+        const applicationSave = await application.save();
+
+        const freelancerUpdate = await User
+                .findOneAndUpdate(
+                    { _id: applicationSave?.userId },
+                    {
+                        $push: {
+                            applications: {
+                                projectId : applicationSave?.projectId,
+                                applicationId: applicationSave?._id
+                            },
+                        }
+                    }, { 
+                        new: true,
+                        runValidators: true,
+                    }
+                )
+        const projectUpdate = await Project
+            .findOneAndUpdate(
+                { _id: applicationSave?.projectId },
+                {
+                    $push: {
+                        appliedBy: {
+                            userId: applicationSave?.userId,
+                            applicationId: applicationSave?._id
+                        }
+                    }
+                }, { 
+                    new: true,
+                    runValidators: true,
+                }
+            )
+        const notification = await setNotification({
+            triggeredBy: freelancerUpdate._id,
+            notify: projectUpdate.postedBy,
+            notificationMessage: `${projectUpdate.projectTitle} applied `,
+            projectId: projectUpdate._id,
+            notificationType: "jobApplication"
+        })
+       
+        return ({
+            status: 200,
+            message: "Project Applied",
+            freelancerId: freelancerUpdate?._id,
+            freelancer: freelancerUpdate?.userName,
+            projectId: applicationSave?.projectId,
+            projectTitle: projectUpdate.projectTitle,
+            applicationId: applicationSave?._id,
+            notificationId: notification?._id
+        })
+
+    }
+}
+
+const getAllAppliedProjectsService = async ({page, size, conditions}) => {
+    const { limit, skip } = pagination({ page, size })
+    
+    const applications = await Application.find({ ...conditions }, {}, { limit, skip })
+        .populate({
+            path: "projectId",
+            model: "project",
+            select: { projectTitle: 1 }
+        })
+        .populate({
+            path: "userId",
+            model: "user",
+            select: { userName: 1, "skills.name": 1 }
+        })
+
+    if(applications.length >= 1) {
+        return ({
+            message: "All Applied Projects",
+            applications,
+            status: 200
+        })
+    } else {
+        return ({
+            message: "Something went wrong",
+            status: 400
+        })
+
+    }
+}
 
 const hireAndRejectService = async ({
     applicationId,
@@ -266,6 +363,8 @@ const agreeRejectHireService = async ({
 
 
 module.exports = {
+    applyProjectService,
+    getAllAppliedProjectsService,
     hireAndRejectService,
     hireRequestService,
     getAllHireRequestsService,

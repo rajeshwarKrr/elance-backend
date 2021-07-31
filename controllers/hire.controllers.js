@@ -1,7 +1,7 @@
 const { User, Project, Application } = require("../models");
-const { pagination, queryConditions } = require("../services/request.service")
+const { pagination, queryConditions } = require("../services/utility.service")
 const { setNotification } = require('../services/notification.service');
-const { hireAndRejectService, hireRequestService, getAllHireRequestsService, agreeRejectHireService } = require("../services/hire.service");
+const { hireAndRejectService, hireRequestService, getAllHireRequestsService, agreeRejectHireService, applyProjectService } = require("../services/hire.service");
 
 
 const applyProject = async (req, res) => {
@@ -15,89 +15,29 @@ const applyProject = async (req, res) => {
         attachmentLinks,
     } = req.body;
 
-    const application = new Application({
+    const response = await applyProjectService({
         projectId,
         userId,
         description,
         bid,
         duration,
         coverLetter,
-        attachmentLinks
+        attachmentLinks,
     })
 
-    application.save()
-        .then(async ({ _id, projectId, userId }) => {
-
-            const freelancer = await User
-                .findOneAndUpdate(
-                    { _id: userId },
-                    {
-                        $push: {
-                            applications: {
-                                projectId,
-                                applicationId: _id
-                            },
-                        }
-                    }, { new: true }
-                ).exec()
-            const project = await Project
-                .findOneAndUpdate(
-                    { _id: projectId },
-                    {
-                        $push: {
-                            appliedBy: {
-                                userId,
-                                applicationId: _id
-                            }
-                        }
-                    }, { new: true }
-                ).exec()
-
-            const notification = await setNotification({
-                triggeredBy: freelancer._id,
-                notify: project.postedBy,
-                notificationMessage: `${project.projectTitle} applied `,
-                projectId: project._id,
-                notificationType: "jobApplication"
-            })
-
-            res.status(200).json({
-                message: "Project Applied",
-                freelancerId: freelancer?._id,
-                freelancer: freelancer.userName,
-                projectId,
-                projectTitle: project.projectTitle,
-                applicationId: _id,
-                notificationId: notification._id
-            })
-        })
+    res.status(response.status).json({
+        ...response
+    })
 }
 
 const getAllAppliedProjects = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
-
-    const { limit, skip } = pagination({ page, size })
-
     const conditions = queryConditions(req.body, Object.keys(Application.schema.obj));
 
-    const applications = await Application.find({ ...conditions }, {}, { limit, skip })
-        .populate({
-            path: "projectId",
-            model: "project",
-            select: { projectTitle: 1 }
-        })
-        .populate({
-            path: "userId",
-            model: "user",
-            select: { userName: 1, "skills.name": 1 }
-        })
-
-    res.status(200).json({
-        message: "All Applied Projects",
-        applications,
-
+    const response =await getAllAppliedProjectsService({page, size, conditions});
+    res.status(response.status).json({
+        ...response
     })
-
 }
 
 const hireApplicant = async (req, res) => {

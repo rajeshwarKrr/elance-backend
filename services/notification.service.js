@@ -1,4 +1,4 @@
-const { Notification } = require("../models");
+const { Notification, User } = require("../models");
 
 const setNotification = async ({
     triggeredBy,
@@ -18,6 +18,11 @@ const setNotification = async ({
     const err = await notification.validateSync();
     if(!err) {
         await notification.save()
+        await User.findByIdAndUpdate(notify, {
+            $push: {
+                notifications: notification._id
+            }
+        } )
         return notification
     } else {
         return err
