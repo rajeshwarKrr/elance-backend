@@ -90,6 +90,7 @@ const createProject = async (req, res) => {
                 .exec()
             res.status(200).json({
                 message: "Project added",
+                projectId: _id,
                 title: projectTitle,
                 user: user?.userName
             })
