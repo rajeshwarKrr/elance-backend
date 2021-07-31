@@ -1,13 +1,14 @@
 const express = require('express');
-const userControllers = require('../../controllers/users.controllers')
+const userControllers = require('../../controllers/users.controllers');
+const { useTryCatch } = require('../../services/utility.service');
 
 const router = express.Router({ mergeParams : true });
 
-router.post('/getAllUsers', userControllers.getAllUsers);
-router.post('/getUserByEmail', userControllers.findByEmail);
-router.post('/registerUser', userControllers.registerUser);
-router.post('/setReview', userControllers.setReview);
-router.post('/getUserReviews', userControllers.getUserReviews);
-router.post("/readNotification", userControllers.readNotification);
+router.post('/getAllUsers', useTryCatch(userControllers.getAllUsers));
+router.post('/getUserByEmail', useTryCatch(userControllers.findByEmail));
+router.post('/registerUser', useTryCatch(userControllers.registerUser));
+router.post('/setReview', useTryCatch(userControllers.setReview));
+router.post('/getUserReviews', useTryCatch(userControllers.getUserReviews));
+router.post("/readNotification", useTryCatch(userControllers.readNotification));
 
 module.exports = router

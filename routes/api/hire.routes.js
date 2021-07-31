@@ -2,18 +2,19 @@ const express = require('express');
 const router = express.Router({ mergeParams : true });
 
 
-const hireControllers = require('../../controllers/hire.controllers')
+const hireControllers = require('../../controllers/hire.controllers');
+const { useTryCatch } = require('../../services/utility.service');
 
-router.post('/applyProject', hireControllers.applyProject);
-router.post('/getAllAppliedProjects', hireControllers.getAllAppliedProjects);
+router.post('/applyProject', useTryCatch(hireControllers.applyProject));
+router.post('/getAllAppliedProjects', useTryCatch(hireControllers.getAllAppliedProjects));
 
-router.post('/hireApplicant', hireControllers.hireApplicant);
-router.post('/rejectApplicant', hireControllers.rejectApplicant);
+router.post('/hireApplicant', useTryCatch(hireControllers.hireApplicant));
+router.post('/rejectApplicant', useTryCatch(hireControllers.rejectApplicant));
 
-router.post('/hireRequest', hireControllers.hireRequest);
-router.post('/getAllHireRequests', hireControllers.getAllHireRequests);
+router.post('/hireRequest', useTryCatch(hireControllers.hireRequest));
+router.post('/getAllHireRequests', useTryCatch(hireControllers.getAllHireRequests));
 
-router.post('/agreeHireRequest', hireControllers.agreeHireRequest);
-router.post('/rejectHireRequest', hireControllers.rejectHireRequest);
+router.post('/agreeHireRequest', useTryCatch(hireControllers.agreeHireRequest));
+router.post('/rejectHireRequest', useTryCatch(hireControllers.rejectHireRequest));
 
 module.exports = router;
