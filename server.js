@@ -38,7 +38,7 @@ connectDB()
 //       message: error.message || 'Internal Server Error',
 //     },
 //   });
-});
+// });
 
 app.get("/", (req, res) => {
   res.json({ msg: "Welcome! Its elance - Backend" })
