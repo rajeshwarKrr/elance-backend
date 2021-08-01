@@ -39,18 +39,20 @@ const createProjectService = async (bodyArgs) => {
 const getAllProjectsService = async ({ page, size, conditions }) => {
 
     const { limit, skip } = pagination({ page, size })
+    const count = await Project.find({ ...conditions }).count()
+    const totalPages = count / size;
 
     const projects = await Project.find({ ...conditions }, {}, { limit, skip })
         .populate("postedBy")
         .populate({
             path: "appliedBy.userId",
             model: "user",
-            select: { userName: 1 }
+            select: { userName: 1, email: 1 }
         })
         .populate({
             path: "appliedBy.applicationId",
             model: "application",
-            select: { description: 1 }
+            select: { description: 1, email: 1 }
         })
 
     if(projects.length >= 1) {
@@ -62,6 +64,8 @@ const getAllProjectsService = async ({ page, size, conditions }) => {
             status: 200,
             message: "Projects List",
             projects,
+            totalPages,
+            page,
             filter: {
                 skills,
                 education,
