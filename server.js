@@ -30,15 +30,7 @@ connectDB()
 //   next(error);
 // });
 
-// // error handler middleware
-// app.use((error, req, res, next) => {
-//   res.status(error.status || 500).send({
-//     error: {
-//       status: error.status || 500,
-//       message: error.message || 'Internal Server Error',
-//     },
-//   });
-// });
+
 
 app.get("/", (req, res) => {
   res.json({ msg: "Welcome! Its elance - Backend" })
@@ -46,8 +38,22 @@ app.get("/", (req, res) => {
 app.use("/api/v1", apiRouter);
 
 // catch 404 and forward to error handler
-app.get('*', function (req, res) {
-  res.status(404).send('Specified Route is not avaliable');
+app.use('*', function (req, res) {
+  res.status(404).json({
+    status: 404,
+    message: "Bad Request"
+  })
+});
+
+// error handler middleware
+app.use((error, req, res, next) => {
+  console.log(error)
+  res.status(error.status || 500).send({
+    error: {
+      status: error.status || 500,
+      message: error.message || 'Internal Server Error',
+    },
+  });
 });
 
 app.listen(process.env.PORT, () => {

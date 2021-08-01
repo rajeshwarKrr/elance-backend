@@ -29,6 +29,17 @@ const setAndUnSetFavUserService = async ({
     }
     )
 
+    const favUserUpdate = await User.findByIdAndUpdate(
+        favouriteUserId, {
+        [switchObj[action].op]: {
+            favByUsers: userId
+        }
+    }, {
+        runValidators: true,
+        new: true
+    }
+    )
+
     return ({
         status: 200,
         message: switchObj[action].message,

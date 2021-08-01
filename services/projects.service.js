@@ -41,11 +41,7 @@ const getAllProjectsService = async ({ page, size, conditions }) => {
     const { limit, skip } = pagination({ page, size })
 
     const projects = await Project.find({ ...conditions }, {}, { limit, skip })
-        .populate({
-            path: "postedBy",
-            model: "user",
-            select: { userName: 1 }
-        })
+        .populate("postedBy")
         .populate({
             path: "appliedBy.userId",
             model: "user",
