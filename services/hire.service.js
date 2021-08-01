@@ -10,6 +10,7 @@ const applyProjectService = async (bodyArgs) => {
     const err = await application.validateSync()
     
     if(err) {
+        
         return ({
             message: "Bad Request",
             status: 400
