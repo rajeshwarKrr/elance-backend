@@ -56,11 +56,12 @@ app.use('/auth/google/callback', passport.authenticate('google',
   }), 
   (req, res) => {
     console.log("req=========================", req.user)
+    // set cookie
     res.redirect(`/protected/${req.user.id}`)
   }
 );
 
-app.get('/protected/:id',  (req, res) => {
+app.get('/protected/:id', isLogged,  (req, res) => {
   res.send(`Hello ${req.params.id}`);
 })
 
