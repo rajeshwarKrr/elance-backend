@@ -247,7 +247,7 @@ const hireRequestService = async ({
                         notify: freelancerId,
                         notificationMessage: `Hire Request for ${project?.projectTitle}`, 
                         projectId: project?._id,
-                        notificationType: ""
+                        notificationType: "hireRequest"
                     })
 
                     console.log(project, freelancer)
