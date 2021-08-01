@@ -35,7 +35,7 @@ connectDB()
 app.get("/", (req, res) => {
   res.json({ msg: "Welcome! Its elance - Backend" })
 })
-app.use("/api/v1", apiRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use('*', function (req, res) {
