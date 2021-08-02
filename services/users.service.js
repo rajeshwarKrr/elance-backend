@@ -6,7 +6,28 @@ const { userSelect } = require("./service.constants");
 
 
 const userFindService = async (conditions, limit = null, skip = null) => {
-    const user = await User.find({ ...conditions }, {}, { limit, skip })
+    const user = await User.find(
+        { ...conditions }, 
+        {}, 
+        { limit, skip })
+    .populate({
+            path: "notifications",
+            populate: {
+                path: "triggeredBy",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "notify",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "contacted",
+            select: userSelect
+        })
     return user;
 }
 
