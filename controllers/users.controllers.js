@@ -1,7 +1,7 @@
 const { User } = require("../models");
 const { queryConditions } = require("../services/utility.service")
 const { readNotificationService } = require("../services/notification.service");
-const { getUserReviewsService, setReviewService, userFindService, getAllUsersService, registerUserService } = require("../services/users.service");
+const { getUserReviewsService, setReviewService, userFindService, getAllUsersService, registerUserService, setContactedService } = require("../services/users.service");
 
 const getAllUsers = async (req, res) => {
   const { page = 1, size = 10 } = req.query;
@@ -102,6 +102,23 @@ const readNotification = async (req, res) => {
 
 }
 
+const setContacted = async (req, res) => {
+  const {
+    senderUserId, 
+    revieverUserId
+  } = req.body
+
+  const response = await setContactedService({
+      senderUserId, 
+      revieverUserId
+  })
+
+  res.status(response.status).json({
+      ...response
+  })
+
+}
+
 
 module.exports = {
   getAllUsers,
@@ -110,4 +127,5 @@ module.exports = {
   setReview,
   getUserReviews,
   readNotification,
+  setContacted,
 }

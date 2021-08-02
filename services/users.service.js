@@ -2,51 +2,71 @@ const { User } = require("../models");
 const { setNotification } = require("./notification.service");
 const { pagination } = require("./utility.service");
 
+const { userSelect } = require("./service.constants");
+
+
 const userFindService = async (conditions, limit = null, skip = null) => {
     const user = await User.find({ ...conditions }, {}, { limit, skip })
     return user;
 }
 
-const getAllUsersService = async ({conditions, page, size}) => {
-    
+const getAllUsersService = async ({ conditions, page, size }) => {
+
     const { limit, skip } = pagination({ page, size })
 
     const users = await User.find({ ...conditions }, {}, { limit, skip })
-        .populate("notifications");
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "triggeredBy",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "notify",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "contacted",
+            select: userSelect
+        });
     const count = await User.find({ ...conditions }).count()
     const totalPages = count / size;
 
     if (users) {
         const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
-          .reduce((a, c) => [...new Set([...a, c.name])], [])
-    
+            .reduce((a, c) => [...new Set([...a, c.name])], [])
+
         const userType = users.reduce((a, c) => [...new Set([...a, c.userType])], [])
-    
+
         return ({
-          message: "Users List",
-          status: 200,
-          users,
-          page, 
-          size,
-          totalPages,
-          filter: {
-            skills,
-            // qualifications, 
-            userType,
-          }
+            message: "Users List",
+            status: 200,
+            users,
+            page,
+            size,
+            totalPages,
+            filter: {
+                skills,
+                // qualifications, 
+                userType,
+            }
         })
-      } else {
-            // app.use((req, res, next) => {
-            //   const error = new Error("Not found");
-            //   error.status = 404;
-            //   next(error);
-            // });
+    } else {
+        // app.use((req, res, next) => {
+        //   const error = new Error("Not found");
+        //   error.status = 404;
+        //   next(error);
+        // });
         return ({
-          message: "Bad Request",
-          status: 400
+            message: "Bad Request",
+            status: 400
         })
-      }
-    
+    }
+
 
 }
 
@@ -155,10 +175,57 @@ const getUserReviewsService = async ({
     })
 }
 
+const setContactedService = async ({
+    senderUserId,
+    revieverUserId
+}) => {
+    const senderUserUpdate = await User.findOneAndUpdate(
+        { _id: senderUserId }, {
+        "$addToSet": {
+            contacted: revieverUserId
+        }
+    }, {
+        runValidators: true,
+        new: true
+    }
+    )
+
+    const revieverUserUpdate = await User.findOneAndUpdate(
+        { _id: revieverUserId }, {
+        "$addToSet": {
+            contacted: senderUserId
+        }
+    }, {
+        runValidators: true,
+        new: true
+    }
+    )
+
+    const notification = await setNotification({
+        triggeredBy: senderUserUpdate._id,
+        notify: revieverUserUpdate._id,
+        notificationMessage: `${senderUserUpdate.userName} sent a message`,
+        notificationType: "message"
+    })
+
+
+
+    return ({
+        status: 200,
+        message: "Contacted user added to set",
+        senderUser: senderUserUpdate?._id,
+        senderUserContacted:  senderUserUpdate?.contacted,
+        revieverUser: revieverUserUpdate?._id,
+        revieverUserContacted: revieverUserUpdate?.contacted,
+    })
+
+}
+
 module.exports = {
     userFindService,
     getAllUsersService,
     registerUserService,
     setReviewService,
     getUserReviewsService,
+    setContactedService
 }

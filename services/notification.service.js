@@ -1,4 +1,5 @@
 const { Notification, User } = require("../models");
+const { userSelect } = require("./service.constants")
 
 const setNotification = async ({
     triggeredBy,
@@ -18,12 +19,24 @@ const setNotification = async ({
     const err = await notification.validateSync();
     if(!err) {
         await notification.save()
+
         await User.findByIdAndUpdate(notify, {
             $push: {
                 notifications: notification._id
             }
         } )
-        return notification
+
+        const notificationFetch = await Notification.find( { _id: notification?.id})
+                .populate({
+                    path: "triggeredBy",
+                    select: userSelect
+                })
+                .populate({
+                    path: "notify",
+                    select: userSelect
+                })
+                
+        return notificationFetch
     } else {
         return err
     }

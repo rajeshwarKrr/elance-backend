@@ -1,7 +1,7 @@
 # API Documentation
 ***
 ***
-## /api/users/getAllUsers?page=1&size=2
+## /api/v1/users/getAllUsers?page=1&size=2
 ###### GET : BODY
 ```
 {
@@ -10,7 +10,7 @@
 }
 ```
 ***
-## /api/users/registerUser
+## /api/v1/users/registerUser
 ###### POST : BODY
 ```
         
@@ -44,7 +44,7 @@
 }
 ```
 ***
-## /api/projects/createProject
+## /api/v1/projects/createProject
 ###### POST : BODY
 ```
 {    
@@ -69,7 +69,7 @@
 }
 ```
 ***
-## /api/projects/getAllProjects?page=1&size=2
+## /api/v1/projects/getAllProjects?page=1&size=2
 ###### GET : BODY
 ```
 {
@@ -79,7 +79,7 @@
 ```
 
 ***
-## api/favourites/setFavUser 
+## api/v1/favourites/setFavUser 
 ###### POST : BODY 
 ```
     {
@@ -88,7 +88,7 @@
     }
 ```
 
-## api/favourites/unSetFavUser 
+## api/v1/favourites/unSetFavUser 
 ###### POST : BODY 
 ```{
     "favouriteUserId": <fav user id>, 
@@ -96,14 +96,14 @@
     }
 ```
 
-## api/favourites/getAllFavUsers 
+## api/v1/favourites/getAllFavUsers 
 ###### GET : BODY 
 ```{
     "userId": <current user id>
     }
 ```
 
-## api/favourites/setFavProject 
+## api/v1/favourites/setFavProject 
 ###### POST: : BODY
 
 ```
@@ -113,7 +113,7 @@
 }
 ```
 
-## api/users/setReview
+## api/v1/users/setReview
 ###### POST: BODY
 
 ```
@@ -127,7 +127,7 @@
 
 ```
 
-## api/users/getUserReviews
+## api/v1/users/getUserReviews
 ###### GET : BODY
 
 ```
@@ -138,7 +138,7 @@
 
 
 
-## api/users/readNotification: POST
+## api/v1/users/readNotification: POST
 
 ###### GET : BODY
 ```
@@ -148,7 +148,7 @@
 }
 ```
 ***
-## /api/hire/getAllAppliedProjects
+## /api/v1/hire/getAllAppliedProjects
 ###### POST : BODY
 ```
 {
@@ -158,7 +158,7 @@
 
 ```
 ***
-## /api/hire/applyProject
+## /api/v1/hire/applyProject
 ###### POST : BODY
 ```
 {
@@ -173,7 +173,7 @@
 ```
 ***
 
-## /api/hire/hireApplicant
+## /api/v1/hire/hireApplicant
 ###### POST : BODY
 ```
 {
@@ -182,7 +182,7 @@
 }
 ```
 ***
-## /api/hire/rejectApplicant
+## /api/v1/hire/rejectApplicant
 ###### POST : BODY
 ```
 {
@@ -192,7 +192,7 @@
 ```
 ***
 
-## /api/hire/hireRequest
+## /api/v1/hire/hireRequest
 ###### POST : BODY
 ```
 {
@@ -205,7 +205,7 @@
 }
 ```
 ***
-## /api/hire/getAllHireRequests
+## /api/v1/hire/getAllHireRequests
 ###### POST : BODY
 ```
 {
@@ -213,7 +213,7 @@
 }
 ```
 ***
-## /api/hire/agreeHireRequest
+## /api/v1/hire/agreeHireRequest
 ###### POST : BODY
 ```
 {
@@ -221,11 +221,23 @@
 }
 ```
 ***
-## /api/hire/rejectHireRequest
+## /api/v1/hire/rejectHireRequest
 ###### POST : BODY
 ```
 {
     "hireRequestId": "61044df2481d76c01185bb3c"
+}
+```
+***
+
+
+## /api/v1/hire/setContacted
+###### POST : BODY
+```
+
+{
+  "senderUserId": "6107c03239b67f0015c5184f",
+  "revieverUserId": "61055a8407ea0e0015a32c45"
 }
 ```
 ***

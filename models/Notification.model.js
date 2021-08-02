@@ -23,7 +23,17 @@ const notificationSchema = new mongoose.Schema({
     },
     notificationType: {
         type: String,
-        enum : ['jobApplication','hireRequest', 'review', 'applicantHired', "applicantRejected", "agreeHireRequest", "rejectedHireRequest"],
+        enum : 
+        [
+            'jobApplication', 
+            'hireRequest', 
+            'review', 
+            'applicantHired', 
+            "applicantRejected", 
+            "agreeHireRequest", 
+            "rejectedHireRequest",
+            "message"
+        ],
         required: true,
     }
 },

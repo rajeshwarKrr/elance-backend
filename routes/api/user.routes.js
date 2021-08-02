@@ -10,5 +10,7 @@ router.post('/registerUser', useTryCatch(userControllers.registerUser));
 router.post('/setReview', useTryCatch(userControllers.setReview));
 router.post('/getUserReviews', useTryCatch(userControllers.getUserReviews));
 router.post("/readNotification", useTryCatch(userControllers.readNotification));
+router.post("/setContacted", useTryCatch(userControllers.setContacted));
+
 
 module.exports = router

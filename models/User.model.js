@@ -179,6 +179,12 @@ const userSchema = new mongoose.Schema({
       ref: "notification"
     }
   ], 
+  contacted : [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user"
+    }
+  ]
 },
 { timestamps: true }
 )
