@@ -222,12 +222,13 @@ const setContactedService = async ({
     }
     )
 
-    const notification = await setNotification({
-        triggeredBy: senderUserUpdate._id,
-        notify: receiverUserUpdate._id,
-        notificationMessage: `${senderUserUpdate.userName} sent a message`,
-        notificationType: "message"
-    })
+    
+    // const notification = await setNotification({
+    //     triggeredBy: senderUserUpdate._id,
+    //     notify: receiverUserUpdate._id,
+    //     notificationMessage: `${senderUserUpdate.userName} sent a message`,
+    //     notificationType: "message"
+    // })
 
 
 
