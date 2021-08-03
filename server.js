@@ -51,17 +51,20 @@ app.use("/api/v1",  apiRouter);
 app.use('/auth/google/callback', passport.authenticate('google', 
   { 
     scope: ['profile','email'], 
-    // successRedirect: '/protected',
-    // failureRedirect: 'https://www.google.co.in',
   }), 
   (req, res) => {
     console.log("req=========================", req.user)
     // set cookie
-    res.redirect(`/protected/${req.user.id}`)
+    res
+      .cookie("token", req.user.verificationToken, {
+        // httpOnly: true
+      })
+      .json({user: req.user})
+      // .redirect("https://www.example.com")
   }
 );
 
-app.get('/protected/:id', isLogged,  (req, res) => {
+app.get('/protected/:id',   (req, res) => {
   res.send(`Hello ${req.params.id}`);
 })
 

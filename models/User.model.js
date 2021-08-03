@@ -179,6 +179,12 @@ const userSchema = new mongoose.Schema({
       ref: "notification"
     }
   ], 
+  provider: {
+    googleId: {
+      type: Number, 
+    }
+  },
+  verificationToken: String,
 },
 { timestamps: true }
 )
