@@ -105,12 +105,12 @@ const readNotification = async (req, res) => {
 const setContacted = async (req, res) => {
   const {
     senderUserId, 
-    revieverUserId
+    receiverUserId
   } = req.body
 
   const response = await setContactedService({
       senderUserId, 
-      revieverUserId
+      receiverUserId
   })
 
   res.status(response.status).json({

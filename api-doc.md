@@ -231,13 +231,13 @@
 ***
 
 
-## /api/v1/hire/setContacted
+## /api/v1/users/setContacted
 ###### POST : BODY
 ```
 
 {
   "senderUserId": "6107c03239b67f0015c5184f",
-  "revieverUserId": "61055a8407ea0e0015a32c45"
+  "receiverUserId": "61055a8407ea0e0015a32c45"
 }
 ```
 ***

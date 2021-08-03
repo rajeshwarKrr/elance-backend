@@ -198,12 +198,12 @@ const getUserReviewsService = async ({
 
 const setContactedService = async ({
     senderUserId,
-    revieverUserId
+    receiverUserId
 }) => {
     const senderUserUpdate = await User.findOneAndUpdate(
         { _id: senderUserId }, {
         "$addToSet": {
-            contacted: revieverUserId
+            contacted: receiverUserId
         }
     }, {
         runValidators: true,
@@ -211,8 +211,8 @@ const setContactedService = async ({
     }
     )
 
-    const revieverUserUpdate = await User.findOneAndUpdate(
-        { _id: revieverUserId }, {
+    const receiverUserUpdate = await User.findOneAndUpdate(
+        { _id: receiverUserId }, {
         "$addToSet": {
             contacted: senderUserId
         }
@@ -224,7 +224,7 @@ const setContactedService = async ({
 
     const notification = await setNotification({
         triggeredBy: senderUserUpdate._id,
-        notify: revieverUserUpdate._id,
+        notify: receiverUserUpdate._id,
         notificationMessage: `${senderUserUpdate.userName} sent a message`,
         notificationType: "message"
     })
@@ -236,8 +236,8 @@ const setContactedService = async ({
         message: "Contacted user added to set",
         senderUser: senderUserUpdate?._id,
         senderUserContacted:  senderUserUpdate?.contacted,
-        revieverUser: revieverUserUpdate?._id,
-        revieverUserContacted: revieverUserUpdate?.contacted,
+        receiverUser: receiverUserUpdate?._id,
+        receiverUserContacted: receiverUserUpdate?.contacted,
     })
 
 }
