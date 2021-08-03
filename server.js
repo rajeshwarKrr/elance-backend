@@ -58,13 +58,14 @@ app.use('/auth/google/callback', passport.authenticate('google',
     res
       .cookie("token", req.user.verificationToken, {
         // httpOnly: true
+        // same site : false 
       })
-      .json({user: req.user})
-      // .redirect("https://www.example.com")
+      // .json({user: req.user, isAuthenticated: req.isAuthenticated()})
+      .redirect(``)
   }
 );
 
-app.get('/protected/:id',   (req, res) => {
+app.get('/protected/:id',  isLoggedIn, (req, res) => {
   res.send(`Hello ${req.params.id}`);
 })
 
