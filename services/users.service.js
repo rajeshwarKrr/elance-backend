@@ -2,15 +2,15 @@ const { User } = require("../models");
 const { setNotification } = require("./notification.service");
 const { pagination } = require("./utility.service");
 
-const { userSelect } = require("./service.constants");
+const { userSelect, applicationSelect, projectSelect } = require("./service.constants");
 
 
 const userFindService = async (conditions, limit = null, skip = null) => {
     const user = await User.find(
-        { ...conditions }, 
-        {}, 
+        { ...conditions },
+        {},
         { limit, skip })
-    .populate({
+        .populate({
             path: "notifications",
             populate: {
                 path: "triggeredBy",
@@ -27,6 +27,26 @@ const userFindService = async (conditions, limit = null, skip = null) => {
         .populate({
             path: "contacted",
             select: userSelect
+        })
+        .populate({
+            path: "projects",
+            select: projectSelect
+        })
+        .populate({
+            path: "applications.projectId",
+            select: projectSelect,
+        })
+        .populate({
+            path: "applications.applicationId",
+            select: applicationSelect,
+        })
+        .populate({
+            path: "hireRequests.projectId",
+            select: projectSelect,
+        })
+        .populate({
+            path: "hireRequests.clientId",
+            select: userSelect,
         })
     return user;
 }
@@ -36,24 +56,45 @@ const getAllUsersService = async ({ conditions, page, size }) => {
     const { limit, skip } = pagination({ page, size })
 
     const users = await User.find({ ...conditions }, {}, { limit, skip })
-        .populate({
-            path: "notifications",
-            populate: {
-                path: "triggeredBy",
-                select: userSelect
-            }
-        })
-        .populate({
-            path: "notifications",
-            populate: {
-                path: "notify",
-                select: userSelect
-            }
-        })
-        .populate({
-            path: "contacted",
+    .populate({
+        path: "notifications",
+        populate: {
+            path: "triggeredBy",
             select: userSelect
-        });
+        }
+    })
+    .populate({
+        path: "notifications",
+        populate: {
+            path: "notify",
+            select: userSelect
+        }
+    })
+    .populate({
+        path: "contacted",
+        select: userSelect
+    })
+    .populate({
+        path: "projects",
+        select: projectSelect
+    })
+    .populate({
+        path: "applications.projectId",
+        select: projectSelect,
+    })
+    .populate({
+        path: "applications.applicationId",
+        select: applicationSelect,
+    })
+    .populate({
+        path: "hireRequests.projectId",
+        select: projectSelect,
+    })
+    .populate({
+        path: "hireRequests.clientId",
+        select: userSelect,
+    })
+    
     const count = await User.find({ ...conditions }).count()
     const totalPages = count / size;
 
@@ -222,7 +263,7 @@ const setContactedService = async ({
     }
     )
 
-    
+
     // const notification = await setNotification({
     //     triggeredBy: senderUserUpdate._id,
     //     notify: receiverUserUpdate._id,
@@ -236,7 +277,7 @@ const setContactedService = async ({
         status: 200,
         message: "Contacted user added to set",
         senderUser: senderUserUpdate?._id,
-        senderUserContacted:  senderUserUpdate?.contacted,
+        senderUserContacted: senderUserUpdate?.contacted,
         receiverUser: receiverUserUpdate?._id,
         receiverUserContacted: receiverUserUpdate?.contacted,
     })

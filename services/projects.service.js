@@ -1,5 +1,6 @@
 const { User, Project } = require("../models");
 const { pagination } = require("../services/utility.service")
+const { userSelect, applicationSelect } = require("./service.constants");
 
 const createProjectService = async (bodyArgs) => {
     const project = new Project({
@@ -47,12 +48,32 @@ const getAllProjectsService = async ({ page, size, conditions }) => {
         .populate({
             path: "appliedBy.userId",
             model: "user",
-            select: { userName: 1, email: 1 }
+            select: userSelect
         })
         .populate({
             path: "appliedBy.applicationId",
             model: "application",
-            select: { description: 1, email: 1 }
+            select: applicationSelect
+        })
+        .populate({
+            path: "postedBy",
+            model: "user",
+            select: userSelect
+        })
+        .populate({
+            path: "hireRequests.freelancerId",
+            model: "user",
+            select: userSelect
+        })
+        .populate({
+            path: "hireRequests.hireRequest",
+            model: "hireRequest",
+        })
+        .populate({
+            path: "hired.freelancerId",
+            model: "user",
+            select: userSelect
+
         })
 
     if(projects.length >= 1) {
