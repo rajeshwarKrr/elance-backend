@@ -1,6 +1,7 @@
 const { User, Project } = require("../models");
+const { setAndUnSetFavUserService, getAllFavUsersService, setAndUnSetFavProjectService } = require("../services/favourite.service");
 
-const { pagination, queryConditions } = require("../services/request.service")
+const { pagination } = require("../services/utility.service")
 
 const setFavUser = async (req, res) => {
     const {
@@ -8,22 +9,15 @@ const setFavUser = async (req, res) => {
         userId
     } = req.body
 
-    await User.findByIdAndUpdate(
-        userId, {
-            $addToSet: {
-                favUsers: favouriteUserId   
-            }
-        }
-    ).exec()
-    .then((result) => {
-
-        res.status(200).json({
-            message: "Favourite User Added",
-            userId: result._id,
-            favUsers: result.favUsers
-        })
+    const response = await setAndUnSetFavUserService({
+        favouriteUserId, 
+        userId,
+        action: "set",
     })
-    
+
+    res.status(response.status).json({
+        ...response
+    })
 }
 
 const unSetFavUser = async (req, res) => {
@@ -32,46 +26,24 @@ const unSetFavUser = async (req, res) => {
         userId
     } = req.body
 
-    await User.findByIdAndUpdate(
-        userId, {
-            $pull: {
-                favUsers: favouriteUserId   
-            }
-        }
-    ).exec()
-    .then((result) => {
-        res.status(200).json({
-            message: "Favourite User Removed",
-            userId: result._id,
-            favUsers: result.favUsers
-        })
+    const response = await setAndUnSetFavUserService({
+        favouriteUserId, 
+        userId,
+        action: "unset",
+    })
+
+    res.status(response.status).json({
+        ...response
     })
 }
 
 const getAllFavUsers = async (req, res) => {
     const { page = 1, size = 10 } = req.query;
 
-    const { limit, skip } = pagination({page, size})
     const { userId } = req.body
-    const users = await User.findById(
-        userId, 
-        {_id: 1, favUsers: 1}, 
-        { limit, skip }
-        ).populate({
-            path: "favUsers", 
-            model: "user",
-            select:{
-                email: 1, 
-                _id: 1, 
-                userType:1, 
-                favProjects: 1
-            }
-        })
-
-    res.status(200).json({
-        message: "All Applied Projects",
-        users,
-
+    const response = getAllFavUsersService({page, size, userId})
+    res.status(response.status).json({
+        ...response
     })
 
 }
@@ -82,60 +54,33 @@ const setFavProject = async (req, res) => {
         userId
     } = req.body;
 
-    await Project.findByIdAndUpdate(
-        favProjectId, {
-            $addToSet: {
-                favByUsers: userId   
-            }
-        }
-    )
-    .exec()
-    .then(async (result) => {
-        await User.findByIdAndUpdate(userId,{
-            $addToSet: {
-                favProjects: result._id   
-            }
-        }).then((result2) => {
-            res.status(200).json({
-                message: "Favourite Project Added",
-                projectId: result._id,
-                favByUsers: result.favByUsers,
-                favUser: result2._id
-            })
-        })
+    const response = await setAndUnSetFavProjectService({
+        favProjectId, 
+        userId,
+        action: "set",
+    })
 
-    }) 
+    res.status(response.status).json({
+        ...response
+    })
+
 }
 
 const unSetFavProject = async (req, res) => {
     const {
         favProjectId, 
-        userId
+        userId,
     } = req.body;
 
-    await Project.findByIdAndUpdate(
-        favProjectId, {
-            $pull: {
-                favByUsers: userId   
-            }
-        }
-    )
-    .exec()
-    .then(async (result) => {
-        await User.findByIdAndUpdate(userId,{
-            $pull: {
-                favProjects: result._id   
-            }
-        }).then((result2) => {
-            res.status(200).json({
-                message: "Favourite Project Added",
-                projectId: result._id,
-                favByUsers: result.favByUsers,
-                favUser: result2._id
-            })
-        })
+    const response = await setAndUnSetFavProjectService({
+        favProjectId, 
+        userId,
+        action: "unset",
+    })
 
-    }) 
+    res.status(response.status).json({
+        ...response
+    })
 }
 
 module.exports = {

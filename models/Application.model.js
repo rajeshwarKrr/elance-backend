@@ -20,16 +20,21 @@ const applicationSchema = new mongoose.Schema({
     }, 
     duration: {
         type: Number,
-        required: true,
+        // required: true,
     },
     coverLetter: {
         type: String, 
-        required: true,
+        // required: true,
     },
     attachmentLinks: [{
         type: String,
-        required: true,
+        // required: true,
     }],
-})
+    applicationStatus: {
+        type: String,
+        enum : ['rejected','hold', 'hired'],
+    },
+},
+{ timestamps: true })
 
 module.exports = mongoose.model("application", applicationSchema)

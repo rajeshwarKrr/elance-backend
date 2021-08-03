@@ -1,3 +1,4 @@
+const { HireRequest } = require("../models");
 
 const pagination = ({page, size}) => {
     const limit = parseInt(size)
@@ -9,14 +10,20 @@ const pagination = ({page, size}) => {
 const queryConditions = (bodyObj, keys = []) => {
     const conditions = {};
 
-    for(let key of keys) {
+    for(let key of ["_id", ...keys]) {
         if(bodyObj[key])
             conditions[key] = bodyObj[key]
     }
+    
     return conditions;
 }
 
+
+const useTryCatch = fn => (req, res, next) => 
+    Promise.resolve(fn(req, res, next)).catch((err) =>next(err))
+
 module.exports = {
     pagination,
-    queryConditions
+    queryConditions,
+    useTryCatch
 }

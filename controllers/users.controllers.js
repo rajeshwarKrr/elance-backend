@@ -1,127 +1,44 @@
 const { User } = require("../models");
-const { pagination, queryConditions } = require("../services/request.service")
+const { queryConditions } = require("../services/utility.service")
+const { readNotificationService } = require("../services/notification.service");
+const { getUserReviewsService, setReviewService, userFindService, getAllUsersService, registerUserService, setContactedService } = require("../services/users.service");
 
 const getAllUsers = async (req, res) => {
   const { page = 1, size = 10 } = req.query;
 
-  const { limit, skip } = pagination({page, size})
-
   const conditions = queryConditions(req.body, Object.keys(User.schema.obj));
 
-  const users = await User.find({
-    ...conditions
-  }, {}, {limit, skip});
+  const response = await getAllUsersService({
+    conditions,
+    page,
+    size
+  })
 
+  return res.status(response?.status).json({
+    ...response
+  })
 
-  if (users) {
-    const skills = users.reduce((a, c) => [...new Set([...a, ...c.skills])], [])
-      .reduce((a, c) => [...new Set([...a, c.name])], [])
-
-    const userType = users.reduce((a, c) => [...new Set([...a, c.userType])], [])
-
-    res.status(200).json({
-      message: "Users List",
-      users,
-      filter: {
-        skills,
-        // qualifications, 
-        userType,
-      }
-    })
-  } else {
-    res.status(400).json({
-      message: "Bad Request"
-    })
-  }
 }
 
 const registerUser = async (req, res) => {
   const {
     email,
-    userName,
     ...rest
   } = req.body
+  const response = await registerUserService({ email, ...rest })
 
-  User.find({ email })
-    .exec()
-    .then((user) => {
-      if (user.length >= 1) {
-        res.status(409).json({
-          message: "email exists"
-        })
-      } else {
-        const user = new User({
-          email, userName, ...rest
-        })
-
-        user.save()
-          .then(async ({ _id,
-            fullName,
-            firstName,
-            lastName,
-            email,
-            userName,
-            userType,
-            occupation,
-            intro,
-            profilePic,
-            phoneNumber,
-            address,
-            website,
-            resume,
-            socialProfiles,
-            qualifications,
-            works,
-            skills,
-            portfolioProjects,
-            reviews }) => {
-            console.log('user saved')
-            res.status(201).json({
-              userDetails: {
-                id: _id,
-                fullName,
-                firstName,
-                lastName,
-                email,
-                userName,
-                userType,
-                occupation,
-                intro,
-                profilePic,
-                phoneNumber,
-                address,
-                website,
-                resume,
-                socialProfiles,
-                qualifications,
-                works,
-                skills,
-                portfolioProjects,
-                reviews
-              }
-            })
-          })
-          .catch((err) => {
-            console.log("something went wrong", err)
-            res.status(400).json({
-              message: err.toString()
-            })
-          })
-      }
-    })
-    .catch((err) => {
-      console.log("something went wrong", err)
-      res.status(400).json({
-        message: err.toString()
-      })
-    })
-}   
+  res.status(response?.status).json({
+    ...response
+  })
+}
 
 const findByEmail = async (req, res) => {
   const { email } = req.body;
-  console.log("email", email)
-  const user = await User.find({ email }).exec()
-  console.log("user", user);
+
+  const user = await userFindService({
+    email
+  })
+
   if (user.length) {
     res.status(200).json({
       message: "User Found",
@@ -135,8 +52,80 @@ const findByEmail = async (req, res) => {
 
 }
 
+const setReview = async (req, res) => {
+  const {
+    userId,
+    reviewedBy,
+    title,
+    description,
+    rating,
+  } = req.body;
+
+  const response = await setReviewService({
+    userId,
+    reviewedBy,
+    title,
+    description,
+    rating,
+  })
+
+  res.status(response?.status).json({
+    ...response,
+    title,
+    description,
+    rating,
+  })
+
+}
+
+const getUserReviews = async (req, res) => {
+  const { reviews, userId } = await getUserReviewsService({ userId: req.body.userId })
+
+  res.status(200).json({
+    message: "Reviews of User",
+    reviews,
+    userId,
+  })
+
+}
+
+const readNotification = async (req, res) => {
+  const { notificationId, userId } = req.body;
+
+  const notification = await readNotificationService({ notificationId, userId });
+
+  res.status(200).json({
+    message: "Notification read success",
+    notificationId: notification._id,
+    userId: notification.notify
+  })
+
+}
+
+const setContacted = async (req, res) => {
+  const {
+    senderUserId, 
+    receiverUserId
+  } = req.body
+
+  const response = await setContactedService({
+      senderUserId, 
+      receiverUserId
+  })
+
+  res.status(response.status).json({
+      ...response
+  })
+
+}
+
+
 module.exports = {
   getAllUsers,
   registerUser,
   findByEmail,
+  setReview,
+  getUserReviews,
+  readNotification,
+  setContacted,
 }

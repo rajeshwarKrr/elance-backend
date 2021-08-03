@@ -3,15 +3,15 @@ const mongoose = require("mongoose");
 const projectSchema = new mongoose.Schema({
     projectTitle: {
         type: String,
-        required: true,
+//         required: true,
     },
     description: {
         type: String,
-        required: true,
+//         required: true,
     },
     skills: [{
         type: String,
-        required: true,
+//         required: true,
     }],
     education: [{
         type: String,
@@ -25,7 +25,7 @@ const projectSchema = new mongoose.Schema({
     }],
     freelancersCount: {
         type: Number,
-        required: true
+//         required: true
     },
     duration: {
         from: {
@@ -68,8 +68,39 @@ const projectSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: "user"      
         }
+    ],
+    hireRequests: [
+        {
+            freelancerId : {
+                type: mongoose.Schema.ObjectId,
+                ref: "user"
+            },
+            hireRequest : {
+                type: mongoose.Schema.ObjectId,
+                ref: "hireRequest"
+            },
+        }
+        
+    ],
+    hired: [
+        {
+            freelancerId : {
+                type: mongoose.Schema.ObjectId,
+                ref: "user", 
+                unique: true,
+            },
+            applicationId: {
+                type: mongoose.Schema.ObjectId,
+                ref: "application"
+            },
+            hireRequestId: {
+                type: mongoose.Schema.ObjectId,
+                ref: "hireRequest"
+            }
+        }
     ]
-})
+},
+{ timestamps: true })
 
 
 module.exports = mongoose.model("project", projectSchema)

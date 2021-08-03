@@ -49,15 +49,15 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true
   }, 
-  address: [{
-    type: String, 
-  }],
+  // address: [{
+  //   type: String, 
+  // }],
   website: {
     type: String,
   },
-  resume: {
-    type: String,
-  },
+  // resume: {
+  //   type: String,
+  // },
   socialProfiles: [{
     name: {
       type: String, 
@@ -70,60 +70,10 @@ const userSchema = new mongoose.Schema({
   }],
   qualifications: [
     {
-      school: {
-        type: String, 
-        required: true
-      },
       degree: {
         type: String, 
         required: true, 
       },
-      graduated: {
-          type: String, 
-          required: true, 
-      }, 
-      description: {
-        type: String, 
-        required: true,
-      }, 
-      from: {
-        type: Date,
-        required: true,
-      }, 
-      to: {
-        type: Date,
-        // required: true
-      }
-    }
-  ],
-  works: [
-    {
-      company :{
-        type: String, 
-        required: true,
-      },
-      title: {
-        type: String, 
-        required: true
-      },
-      from: {
-        type: String, 
-        required: true
-      },
-      to: {
-        type: String, 
-        required: true,
-      },
-      description: {
-        type: String, 
-        required: true,
-      }, 
-      currentCompany: {
-        type: Boolean, 
-        required: true,
-        enum: [ true, false ],
-        default: false
-      }
     }
   ],
   skills: [
@@ -132,30 +82,45 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true
       }, 
-      level: {
-        type: String, 
-        required: true
-      }
     }
   ],
   portfolioProjects: [
     {
       title: String,
-      category: String,
+      // category: String,
       description: String,
+      skills: [{
+        type: String
+      }],
       image_url: String,
       project_url: String
     }
   ],
   reviews: [
     {
-      title: String, 
-      description: String, 
-      rating: Number,
-      reviewBy: {
+      title: {
+        type: String,
+        required: true,
+      }, 
+      description: {
+        type: String,
+        required: true,
+      },  
+      rating: {
+        type: Number,
+        required: true,
+      }, 
+      reviewedBy: {
         type: mongoose.Schema.ObjectId,
-        ref: "user"
+        ref: "user",
+        required: true,
       }
+    }
+  ],
+  reviewed: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
     }
   ],
   projects: [
@@ -172,8 +137,24 @@ const userSchema = new mongoose.Schema({
     applicationId: {
       type: mongoose.Schema.ObjectId,
       ref: "application"
-    }
+    },
   }], 
+  hireRequests: [
+    {
+      projectId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "project"
+      }, 
+      clientId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
+      },
+      hireRequestId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "hireRequest"
+      }, 
+    }
+  ],
   favUsers: [
     {
       type: mongoose.Schema.ObjectId,
@@ -191,9 +172,82 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: "user"
     }
+  ], 
+  notifications: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "notification"
+    }
+  ], 
+  contacted : [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "user"
+    }
   ]
 },
 { timestamps: true }
 )
 
 module.exports = mongoose.model("user", userSchema);
+
+
+
+// qualifications: [
+//   {
+//     // school: {
+//     //   type: String, 
+//     //   required: true
+//     // },
+//     degree: {
+//       type: String, 
+//       required: true, 
+//     },
+//     // graduated: {
+//     //     type: String, 
+//     //     required: true, 
+//     // }, 
+//     // description: {
+//     //   type: String, 
+//     //   required: true,
+//     // }, 
+//     // from: {
+//     //   type: Date,
+//     //   required: true,
+//     // }, 
+//     // to: {
+//     //   type: Date,
+//     //   // required: true
+//     // }
+//   }
+// ],
+  // works: [
+  //   {
+  //     company :{
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     title: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     from: {
+  //       type: String, 
+  //       required: true
+  //     },
+  //     to: {
+  //       type: String, 
+  //       required: true,
+  //     },
+  //     description: {
+  //       type: String, 
+  //       required: true,
+  //     }, 
+  //     currentCompany: {
+  //       type: Boolean, 
+  //       required: true,
+  //       enum: [ true, false ],
+  //       default: false
+  //     }
+  //   }
+  // ],
