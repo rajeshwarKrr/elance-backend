@@ -241,3 +241,14 @@
 }
 ```
 ***
+
+
+## /api/v1/search
+###### POST : BODY
+```
+
+{
+    "searchString": "react"
+}
+```
+***
