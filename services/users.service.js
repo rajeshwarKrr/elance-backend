@@ -8,7 +8,6 @@ const { userSelect, applicationSelect, projectSelect } = require("./service.cons
 const userFindService = async (conditions, limit = null, skip = null) => {
     const user = await User.find(
         { ...conditions },
-        {},
         { limit, skip })
         .populate({
             path: "notifications",
@@ -56,6 +55,7 @@ const getAllUsersService = async ({ conditions, page, size }) => {
     const { limit, skip } = pagination({ page, size })
 
     const users = await User.find({ ...conditions }, {}, { limit, skip })
+    .sort({"createdAt": -1})
     .populate({
         path: "notifications",
         populate: {

@@ -44,6 +44,7 @@ const getAllProjectsService = async ({ page, size, conditions }) => {
     const totalPages = count / size;
 
     const projects = await Project.find({ ...conditions }, {}, { limit, skip })
+        .sort({"createdAt": -1})
         .populate("postedBy")
         .populate({
             path: "appliedBy.userId",
@@ -95,7 +96,7 @@ const getAllProjectsService = async ({ page, size, conditions }) => {
         })
     } else {
         return ({
-            status: 200,
+            status: 400,
             message: "Bad Request"
         })
     }
