@@ -8,7 +8,7 @@ const { userSelect, applicationSelect, projectSelect } = require("./service.cons
 const userFindService = async (conditions) => {
     const user = await User.find(
         { ...conditions },
-        )
+    )
         .populate({
             path: "notifications",
             populate: {
@@ -21,7 +21,8 @@ const userFindService = async (conditions) => {
             populate: {
                 path: "notify",
                 select: userSelect
-            }
+            },
+            match: { isRead: false }
         })
         .populate({
             path: "contacted",
@@ -48,19 +49,19 @@ const userFindService = async (conditions) => {
             select: userSelect,
         })
         .populate({
-            path: "reviews.reviewedBy", 
+            path: "reviews.reviewedBy",
             select: userSelect,
         })
         .populate({
-            path: "favUsers", 
+            path: "favUsers",
             select: userSelect,
         })
         .populate({
-            path: "favProjects", 
+            path: "favProjects",
             select: userSelect,
         })
         .populate({
-            path: "favByUsers", 
+            path: "favByUsers",
             select: userSelect,
         })
     return user;
@@ -71,61 +72,63 @@ const getAllUsersService = async ({ conditions, page, size }) => {
     const { limit, skip } = pagination({ page, size })
 
     const users = await User.find({ ...conditions }, {}, { limit, skip })
-    .sort({"createdAt": -1})
-    .populate({
-        path: "notifications",
-        populate: {
-            path: "triggeredBy",
+        .sort({ "createdAt": -1 })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "triggeredBy",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "notify",
+                select: userSelect
+            },
+
+            match: { isRead: false }
+        })
+        .populate({
+            path: "contacted",
             select: userSelect
-        }
-    })
-    .populate({
-        path: "notifications",
-        populate: {
-            path: "notify",
-            select: userSelect
-        }
-    })
-    .populate({
-        path: "contacted",
-        select: userSelect
-    })
-    .populate({
-        path: "projects",
-        select: projectSelect
-    })
-    .populate({
-        path: "applications.projectId",
-        select: projectSelect,
-    })
-    .populate({
-        path: "applications.applicationId",
-        select: applicationSelect,
-    })
-    .populate({
-        path: "hireRequests.projectId",
-        select: projectSelect,
-    })
-    .populate({
-        path: "hireRequests.clientId",
-        select: userSelect,
-    })
-    .populate({
-        path: "reviews.reviewedBy", 
-        select: userSelect,
-    })
-    .populate({
-        path: "favUsers", 
-        select: userSelect,
-    })
-    .populate({
-        path: "favProjects", 
-        select: userSelect,
-    })
-    .populate({
-        path: "favByUsers", 
-        select: userSelect,
-    })
+        })
+        .populate({
+            path: "projects",
+            select: projectSelect
+        })
+        .populate({
+            path: "applications.projectId",
+            select: projectSelect,
+        })
+        .populate({
+            path: "applications.applicationId",
+            select: applicationSelect,
+        })
+        .populate({
+            path: "hireRequests.projectId",
+            select: projectSelect,
+        })
+        .populate({
+            path: "hireRequests.clientId",
+            select: userSelect,
+        })
+        .populate({
+            path: "reviews.reviewedBy",
+            select: userSelect,
+        })
+        .populate({
+            path: "favUsers",
+            select: userSelect,
+        })
+        .populate({
+            path: "favProjects",
+            select: userSelect,
+        })
+        .populate({
+            path: "favByUsers",
+            select: userSelect,
+        })
 
     const count = await User.find({ ...conditions }).count()
     const totalPages = count / size;
