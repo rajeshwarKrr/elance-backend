@@ -5,10 +5,10 @@ const { pagination } = require("./utility.service");
 const { userSelect, applicationSelect, projectSelect } = require("./service.constants");
 
 
-const userFindService = async (conditions, limit = null, skip = null) => {
+const userFindService = async (conditions) => {
     const user = await User.find(
         { ...conditions },
-        { limit, skip })
+        )
         .populate({
             path: "notifications",
             populate: {
