@@ -47,6 +47,22 @@ const userFindService = async (conditions) => {
             path: "hireRequests.clientId",
             select: userSelect,
         })
+        .populate({
+            path: "reviews.reviewedBy", 
+            select: userSelect,
+        })
+        .populate({
+            path: "favUsers", 
+            select: userSelect,
+        })
+        .populate({
+            path: "favProjects", 
+            select: userSelect,
+        })
+        .populate({
+            path: "favByUsers", 
+            select: userSelect,
+        })
     return user;
 }
 
@@ -94,7 +110,23 @@ const getAllUsersService = async ({ conditions, page, size }) => {
         path: "hireRequests.clientId",
         select: userSelect,
     })
-    
+    .populate({
+        path: "reviews.reviewedBy", 
+        select: userSelect,
+    })
+    .populate({
+        path: "favUsers", 
+        select: userSelect,
+    })
+    .populate({
+        path: "favProjects", 
+        select: userSelect,
+    })
+    .populate({
+        path: "favByUsers", 
+        select: userSelect,
+    })
+
     const count = await User.find({ ...conditions }).count()
     const totalPages = count / size;
 
@@ -118,11 +150,6 @@ const getAllUsersService = async ({ conditions, page, size }) => {
             }
         })
     } else {
-        // app.use((req, res, next) => {
-        //   const error = new Error("Not found");
-        //   error.status = 404;
-        //   next(error);
-        // });
         return ({
             message: "Bad Request",
             status: 400
