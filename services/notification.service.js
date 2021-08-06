@@ -1,35 +1,17 @@
 const { Notification, User } = require("../models");
 const { userSelect } = require("./service.constants")
 
-const setNotification = async ({
-    triggeredBy,
-    notify,
-    notificationMessage,
-    projectId,
-    notificationType,
-}) => {
+const setNotification = async (notificationBody) => {
 
     const notificationCreate = await new Notification({
-        triggeredBy,
-        notify,
-        notificationMessage,
-        projectId, 
-        notificationType,
+        ...notificationBody
     })
-    console.log(` triggeredBy,
-    notify,
-    notificationMessage,
-    projectId, 
-    notificationType,`,  triggeredBy,
-    notify,
-    notificationMessage,
-    projectId, 
-    notificationType)
+
     const err = await notificationCreate.validateSync();
     if(!err) {
         const notificationDetails = await notificationCreate.save()
 
-        const notifyUserDetails = await User.findByIdAndUpdate(notify, {
+        const notifyUserDetails = await User.findByIdAndUpdate(notificationBody.notify, {
             $push: {
                 notifications: notificationDetails._id
             }
@@ -37,7 +19,8 @@ const setNotification = async ({
             new: true,
             runValidators: true,
         } ).select(userSelect)
-        const triggeredByUserDetails = await User.findById(triggeredBy , userSelect )
+        const triggeredByUserDetails = await User.findById(notificationBody.triggeredBy , userSelect )
+
         return ({notificationDetails, notifyUserDetails, triggeredByUserDetails})
     } else {
         throw Error("Bad Notification Request") 
