@@ -250,7 +250,6 @@ const hireRequestService = async ({
                         notificationType: "hireRequest"
                     })
 
-                    freelancer && project && console.log(project, freelancer)
                     return ({
                         hireRequest: result, 
                         projectId: project?._id,
@@ -360,6 +359,29 @@ const agreeRejectHireService = async ({
     })
 }
 
+const remindJobApplicationService = async ({
+    applicationId
+}) => {
+    const application = await Application
+        .find({_id: applicationId})
+        .populate("projectId")
+
+    const notification = await setNotification({
+        triggeredBy: application?.userId,
+        notify: application?.projectId?.postedBy,
+        notificationMessage: `reminder notification`, 
+        projectId:  application?.projectId?._id,
+        notificationType: "jobApplicationReminder"
+    })
+
+    return ({
+        status: 200,
+        message: "Reminder Notification Sent",
+        notification,
+    })
+
+    
+}
 
 
 module.exports = {
@@ -368,5 +390,6 @@ module.exports = {
     hireAndRejectService,
     hireRequestService,
     getAllHireRequestsService,
-    agreeRejectHireService
+    agreeRejectHireService,
+    remindJobApplicationService
 }

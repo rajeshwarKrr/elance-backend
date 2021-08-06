@@ -17,4 +17,6 @@ router.post('/getAllHireRequests', useTryCatch(hireControllers.getAllHireRequest
 router.post('/agreeHireRequest', useTryCatch(hireControllers.agreeHireRequest));
 router.post('/rejectHireRequest', useTryCatch(hireControllers.rejectHireRequest));
 
+router.post('/remindJobApplication', useTryCatch(hireControllers.remindJobApplication));
+
 module.exports = router;
