@@ -34,7 +34,11 @@ const userFindService = async (conditions) => {
         })
         .populate({
             path: "applications.projectId",
-            select: projectSelect,
+            select: {...projectSelect, hired: 1},
+            populate: {
+                path: "hired.freelancerId",
+                select: userSelect
+            }
         })
         .populate({
             path: "applications.applicationId",
@@ -99,7 +103,11 @@ const getAllUsersService = async ({ conditions, page, size }) => {
         })
         .populate({
             path: "applications.projectId",
-            select: projectSelect,
+            select: {...projectSelect, hired: 1},
+            populate: {
+                path: "hired.freelancerId",
+                select: userSelect
+            }
         })
         .populate({
             path: "applications.applicationId",
