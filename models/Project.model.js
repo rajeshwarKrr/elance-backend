@@ -102,5 +102,7 @@ const projectSchema = new mongoose.Schema({
 },
 { timestamps: true })
 
+// run this below line in mongo for full text search
+// db.projects.createIndex({ "$**" : "text" })
 
 module.exports = mongoose.model("project", projectSchema)

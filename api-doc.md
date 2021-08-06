@@ -241,3 +241,21 @@
 }
 ```
 ***
+
+
+## /api/v1/search
+###### POST : BODY
+```
+
+{
+    "searchString" : "project",
+    "skills": [
+        "javascript"
+    ],
+    "Location": ["remote"],
+    "isRemote": true,
+    "budgetMin": 100,
+    "budgetMax": 300
+}
+```
+***

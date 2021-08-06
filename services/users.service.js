@@ -5,11 +5,10 @@ const { pagination } = require("./utility.service");
 const { userSelect, applicationSelect, projectSelect } = require("./service.constants");
 
 
-const userFindService = async (conditions, limit = null, skip = null) => {
+const userFindService = async (conditions) => {
     const user = await User.find(
         { ...conditions },
-        {},
-        { limit, skip })
+    )
         .populate({
             path: "notifications",
             populate: {
@@ -22,7 +21,8 @@ const userFindService = async (conditions, limit = null, skip = null) => {
             populate: {
                 path: "notify",
                 select: userSelect
-            }
+            },
+            match: { isRead: false }
         })
         .populate({
             path: "contacted",
@@ -34,7 +34,11 @@ const userFindService = async (conditions, limit = null, skip = null) => {
         })
         .populate({
             path: "applications.projectId",
-            select: projectSelect,
+            select: {...projectSelect, hired: 1},
+            populate: {
+                path: "hired.freelancerId",
+                select: userSelect
+            }
         })
         .populate({
             path: "applications.applicationId",
@@ -48,6 +52,22 @@ const userFindService = async (conditions, limit = null, skip = null) => {
             path: "hireRequests.clientId",
             select: userSelect,
         })
+        .populate({
+            path: "reviews.reviewedBy",
+            select: userSelect,
+        })
+        .populate({
+            path: "favUsers",
+            select: userSelect,
+        })
+        .populate({
+            path: "favProjects",
+            select: userSelect,
+        })
+        .populate({
+            path: "favByUsers",
+            select: userSelect,
+        })
     return user;
 }
 
@@ -56,45 +76,68 @@ const getAllUsersService = async ({ conditions, page, size }) => {
     const { limit, skip } = pagination({ page, size })
 
     const users = await User.find({ ...conditions }, {}, { limit, skip })
-    .populate({
-        path: "notifications",
-        populate: {
-            path: "triggeredBy",
+        .sort({ "createdAt": -1 })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "triggeredBy",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "notifications",
+            populate: {
+                path: "notify",
+                select: userSelect
+            },
+
+            match: { isRead: false }
+        })
+        .populate({
+            path: "contacted",
             select: userSelect
-        }
-    })
-    .populate({
-        path: "notifications",
-        populate: {
-            path: "notify",
-            select: userSelect
-        }
-    })
-    .populate({
-        path: "contacted",
-        select: userSelect
-    })
-    .populate({
-        path: "projects",
-        select: projectSelect
-    })
-    .populate({
-        path: "applications.projectId",
-        select: projectSelect,
-    })
-    .populate({
-        path: "applications.applicationId",
-        select: applicationSelect,
-    })
-    .populate({
-        path: "hireRequests.projectId",
-        select: projectSelect,
-    })
-    .populate({
-        path: "hireRequests.clientId",
-        select: userSelect,
-    })
-    
+        })
+        .populate({
+            path: "projects",
+            select: projectSelect
+        })
+        .populate({
+            path: "applications.projectId",
+            select: {...projectSelect, hired: 1},
+            populate: {
+                path: "hired.freelancerId",
+                select: userSelect
+            }
+        })
+        .populate({
+            path: "applications.applicationId",
+            select: applicationSelect,
+        })
+        .populate({
+            path: "hireRequests.projectId",
+            select: projectSelect,
+        })
+        .populate({
+            path: "hireRequests.clientId",
+            select: userSelect,
+        })
+        .populate({
+            path: "reviews.reviewedBy",
+            select: userSelect,
+        })
+        .populate({
+            path: "favUsers",
+            select: userSelect,
+        })
+        .populate({
+            path: "favProjects",
+            select: userSelect,
+        })
+        .populate({
+            path: "favByUsers",
+            select: userSelect,
+        })
+
     const count = await User.find({ ...conditions }).count()
     const totalPages = count / size;
 
@@ -118,11 +161,6 @@ const getAllUsersService = async ({ conditions, page, size }) => {
             }
         })
     } else {
-        // app.use((req, res, next) => {
-        //   const error = new Error("Not found");
-        //   error.status = 404;
-        //   next(error);
-        // });
         return ({
             message: "Bad Request",
             status: 400
@@ -208,7 +246,7 @@ const setReviewService = async ({
     return ({
         reviewedBy: reviewerUpdate?.email,
         user,
-        notification: notification?._id,
+        notification,
         status: 200
     })
 
@@ -262,16 +300,6 @@ const setContactedService = async ({
         new: true
     }
     )
-
-
-    // const notification = await setNotification({
-    //     triggeredBy: senderUserUpdate._id,
-    //     notify: receiverUserUpdate._id,
-    //     notificationMessage: `${senderUserUpdate.userName} sent a message`,
-    //     notificationType: "message"
-    // })
-
-
 
     return ({
         status: 200,

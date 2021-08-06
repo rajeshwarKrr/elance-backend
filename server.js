@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const { connectDB } = require("./db");
 // routers
-const apiRouter = require("./routes/api")
+const apiRouter = require("./routes/api");
 
 const app = express()
 // Allow Origins according to your need.

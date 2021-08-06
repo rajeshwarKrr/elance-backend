@@ -9,36 +9,29 @@ const setNotification = async ({
     notificationType,
 }) => {
 
-    const notification = await new Notification({
+    const notificationCreate = await new Notification({
         triggeredBy,
         notify,
         notificationMessage,
         projectId, 
         notificationType,
     })
-    const err = await notification.validateSync();
+    const err = await notificationCreate.validateSync();
     if(!err) {
-        await notification.save()
+        const notificationDetails = await notificationCreate.save()
 
-        await User.findByIdAndUpdate(notify, {
+        const notifyUserDetails = await User.findByIdAndUpdate(notify, {
             $push: {
-                notifications: notification._id
+                notifications: notificationDetails._id
             }
-        } )
-
-        const notificationFetch = await Notification.find( { _id: notification?.id})
-                .populate({
-                    path: "triggeredBy",
-                    select: userSelect
-                })
-                .populate({
-                    path: "notify",
-                    select: userSelect
-                })
-                
-        return notificationFetch
+        },{ 
+            new: true,
+            runValidators: true,
+        } ).select(userSelect)
+        const triggeredByUserDetails = await User.findById(triggeredBy , userSelect )
+        return ({notificationDetails, notifyUserDetails, triggeredByUserDetails})
     } else {
-        return err
+        throw Error("Bad Notification Request") 
     }
     // node mailer 
 }

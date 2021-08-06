@@ -123,7 +123,7 @@ const userSchema = new mongoose.Schema({
       ref: "user",
     }
   ],
-  projects: [
+  projects: [ // Client Posted Projects
     {
       type: mongoose.Schema.ObjectId,
       ref: "project"
@@ -189,65 +189,7 @@ const userSchema = new mongoose.Schema({
 { timestamps: true }
 )
 
+// run this below line in mongo for full text search
+// db.users.createIndex({ "$**" : "text" })
+
 module.exports = mongoose.model("user", userSchema);
-
-
-
-// qualifications: [
-//   {
-//     // school: {
-//     //   type: String, 
-//     //   required: true
-//     // },
-//     degree: {
-//       type: String, 
-//       required: true, 
-//     },
-//     // graduated: {
-//     //     type: String, 
-//     //     required: true, 
-//     // }, 
-//     // description: {
-//     //   type: String, 
-//     //   required: true,
-//     // }, 
-//     // from: {
-//     //   type: Date,
-//     //   required: true,
-//     // }, 
-//     // to: {
-//     //   type: Date,
-//     //   // required: true
-//     // }
-//   }
-// ],
-  // works: [
-  //   {
-  //     company :{
-  //       type: String, 
-  //       required: true,
-  //     },
-  //     title: {
-  //       type: String, 
-  //       required: true
-  //     },
-  //     from: {
-  //       type: String, 
-  //       required: true
-  //     },
-  //     to: {
-  //       type: String, 
-  //       required: true,
-  //     },
-  //     description: {
-  //       type: String, 
-  //       required: true,
-  //     }, 
-  //     currentCompany: {
-  //       type: Boolean, 
-  //       required: true,
-  //       enum: [ true, false ],
-  //       default: false
-  //     }
-  //   }
-  // ],

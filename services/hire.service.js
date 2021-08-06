@@ -63,7 +63,7 @@ const applyProjectService = async (bodyArgs) => {
             projectId: applicationSave?.projectId,
             projectTitle: projectUpdate.projectTitle,
             applicationId: applicationSave?._id,
-            notificationId: notification?._id
+            notification,
         })
 
     }
@@ -182,7 +182,7 @@ const hireAndRejectService = async ({
         message: switchObj[applicationStatus].responseMessage,
         freelancerId: application?.userId._id,
         projectId: application?.projectId._id,
-        notificationId: notification?._id
+        notification
     })
 
 }
@@ -256,7 +256,7 @@ const hireRequestService = async ({
                         projectId: project?._id,
                         freelancerId: freelancer?._id,
                         clientId: client?._id,
-                        notificationId: notification?._id
+                        notification,
                     })
                 })
 
@@ -356,7 +356,7 @@ const agreeRejectHireService = async ({
         message: switchObj[hireRequestStatus].responseMessage,
         freelancerId: hireRequest.userId?._id,
         projectId: hireRequest?.projectId,
-        notificationId: notification?._id
+        notification,
     })
 }
 

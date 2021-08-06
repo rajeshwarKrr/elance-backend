@@ -6,7 +6,10 @@ const userRouter = require('./user.routes')
 const projectsRouter = require('./project.routes')
 const favoutiesRouter = require('./favourites.routes');
 const hireRouter = require('./hire.routes');
+const searchRouter = require('./search.routes');
 
+
+apiRouter.use('/search', searchRouter)
 apiRouter.use('/users', userRouter)
 apiRouter.use('/projects', projectsRouter)
 apiRouter.use('/favourites', favoutiesRouter)
