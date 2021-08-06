@@ -205,7 +205,7 @@ const hireRequestService = async ({
     })
     const hireRequestOnSave = await hireRequest.save()
                 .then( async (result) => {
-                    const freelancer = await User
+                    await User
                         .findOneAndUpdate(
                             { 
                                 _id: freelancerId,
@@ -224,7 +224,7 @@ const hireRequestService = async ({
                         )
 
 
-                    const project = await Project   
+                    await Project   
                             .findOneAndUpdate(
                                 { 
                                     _id: projectId,
@@ -240,8 +240,11 @@ const hireRequestService = async ({
                                     }
                                 }, {new : true}
                             )
+
+                    const project = await Project.findOne({_id: projectId})
+                    const freelancer = await User.findOne({_id: freelancerId})
                     const client = await User.find({_id: clientId})
-                   console.log("result?._id ====================", result?._id)
+
                     const notification = await setNotification({
                         triggeredBy: clientId,
                         notify: freelancerId,

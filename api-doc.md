@@ -230,7 +230,14 @@
 ```
 ***
 
-
+## /api/v1/hire//remindJobApplication
+###### POST : BODY
+```
+{
+    "applicationId": "610d38a99743554f01e82782"
+}
+```
+***
 ## /api/v1/users/setContacted
 ###### POST : BODY
 ```
