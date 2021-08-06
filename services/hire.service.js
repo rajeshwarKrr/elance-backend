@@ -241,13 +241,14 @@ const hireRequestService = async ({
                                 }, {new : true}
                             )
                     const client = await User.find({_id: clientId})
-
+                   console.log("result?._id ====================", result?._id)
                     const notification = await setNotification({
                         triggeredBy: clientId,
                         notify: freelancerId,
                         notificationMessage: `Hire Request for ${project?.projectTitle}`, 
                         projectId: projectId,
-                        notificationType: "hireRequest"
+                        notificationType: "hireRequest",
+                        hireRequestId: result?._id
                     })
 
                     return ({
