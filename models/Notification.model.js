@@ -32,7 +32,8 @@ const notificationSchema = new mongoose.Schema({
             "applicantRejected", 
             "agreeHireRequest", 
             "rejectedHireRequest",
-            "message"
+            "message",
+            "jobApplicationReminder"
         ],
         required: true,
     }

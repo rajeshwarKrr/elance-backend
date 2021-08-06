@@ -1,6 +1,6 @@
 const { Application } = require("../models");
 const { queryConditions } = require("../services/utility.service")
-const { hireAndRejectService, hireRequestService, getAllHireRequestsService, agreeRejectHireService, applyProjectService } = require("../services/hire.service");
+const { hireAndRejectService, hireRequestService, getAllHireRequestsService, agreeRejectHireService, applyProjectService, remindJobApplicationService } = require("../services/hire.service");
 
 
 const applyProject = async (req, res) => {
@@ -181,6 +181,14 @@ const rejectHireRequest = async (req, res) => {
 
 }
 
+const remindJobApplication = async (req, res) => {
+    const { applicationId } = req.body
+    const response = await remindJobApplicationService({applicationId})
+    res.status(response.status).json({
+        ...response
+    })
+}
+
 module.exports = {
     applyProject,
     getAllAppliedProjects,
@@ -190,4 +198,5 @@ module.exports = {
     getAllHireRequests,
     agreeHireRequest,
     rejectHireRequest,
+    remindJobApplication
 }

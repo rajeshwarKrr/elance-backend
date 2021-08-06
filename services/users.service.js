@@ -9,65 +9,66 @@ const userFindService = async (conditions) => {
     const user = await User.find(
         { ...conditions },
     )
-        .populate({
-            path: "notifications",
-            populate: {
-                path: "triggeredBy",
-                select: userSelect
-            }
-        })
-        .populate({
-            path: "notifications",
-            populate: {
-                path: "notify",
-                select: userSelect
-            },
-            match: { isRead: false }
-        })
-        .populate({
-            path: "contacted",
+    .populate({
+        path: "notifications",
+        populate: {
+            path: "triggeredBy",
             select: userSelect
-        })
-        .populate({
-            path: "projects",
-            select: projectSelect
-        })
-        .populate({
-            path: "applications.projectId",
-            select: {...projectSelect, hired: 1},
-            populate: {
-                path: "hired.freelancerId",
-                select: userSelect
-            }
-        })
-        .populate({
-            path: "applications.applicationId",
-            select: applicationSelect,
-        })
-        .populate({
-            path: "hireRequests.projectId",
-            select: projectSelect,
-        })
-        .populate({
-            path: "hireRequests.clientId",
-            select: userSelect,
-        })
-        .populate({
-            path: "reviews.reviewedBy",
-            select: userSelect,
-        })
-        .populate({
-            path: "favUsers",
-            select: userSelect,
-        })
-        .populate({
-            path: "favProjects",
-            select: userSelect,
-        })
-        .populate({
-            path: "favByUsers",
-            select: userSelect,
-        })
+        }
+    })
+    .populate({
+        path: "notifications",
+        populate: {
+            path: "notify",
+            select: userSelect
+        },
+
+        match: { isRead: false }
+    })
+    .populate({
+        path: "contacted",
+        select: userSelect
+    })
+    .populate({
+        path: "projects",
+        select: projectSelect
+    })
+    .populate({
+        path: "applications.projectId",
+        select: {...projectSelect, hired: 1},
+        populate: {
+            path: "hired.freelancerId",
+            select: userSelect
+        }
+    })
+    .populate({
+        path: "applications.applicationId",
+        select: applicationSelect,
+    })
+    .populate({
+        path: "hireRequests.projectId",
+        select: projectSelect,
+    })
+    .populate({
+        path: "hireRequests.clientId",
+        select: userSelect,
+    })
+    .populate({
+        path: "reviews.reviewedBy",
+        select: userSelect,
+    })
+    .populate({
+        path: "favUsers",
+        select: userSelect,
+    })
+    .populate({
+        path: "favProjects",
+        select: userSelect,
+    })
+    .populate({
+        path: "favByUsers",
+        select: userSelect,
+    })
     return user;
 }
 
