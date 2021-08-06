@@ -159,13 +159,13 @@ const hireAndRejectService = async ({
 
     const switchObj = {
         hired: {
-            notificationType: "hired",
+            notificationType: "applicantHired",
             notificationMessage: `Application for "${application.projectId.projectTitle}" got Approved`, 
             responseMessage: "Applicant Hired"
 
         },
         rejected: {
-            notificationType: "rejected",
+            notificationType: "applicantRejected",
             notificationMessage: `Application for "${application.projectId.projectTitle}" got Rejected`, 
             responseMessage: "Applicant Rejected"
         },
@@ -239,18 +239,18 @@ const hireRequestService = async ({
                                         }
                                     }
                                 }, {new : true}
-                            ).then(result => result)
+                            )
                     const client = await User.find({_id: clientId})
 
                     const notification = await setNotification({
                         triggeredBy: clientId,
                         notify: freelancerId,
                         notificationMessage: `Hire Request for ${project?.projectTitle}`, 
-                        projectId: project?._id,
+                        projectId: projectId,
                         notificationType: "hireRequest"
                     })
 
-                    console.log(project, freelancer)
+                    freelancer && project && console.log(project, freelancer)
                     return ({
                         hireRequest: result, 
                         projectId: project?._id,
