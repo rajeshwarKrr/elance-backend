@@ -21,6 +21,11 @@ const notificationSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "project",
     },
+    hireRequestId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "hireRequest",
+
+    },
     notificationType: {
         type: String,
         enum : 
@@ -32,7 +37,8 @@ const notificationSchema = new mongoose.Schema({
             "applicantRejected", 
             "agreeHireRequest", 
             "rejectedHireRequest",
-            "message"
+            "message",
+            "jobApplicationReminder"
         ],
         required: true,
     }
