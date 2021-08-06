@@ -16,6 +16,15 @@ const setNotification = async ({
         projectId, 
         notificationType,
     })
+    console.log(` triggeredBy,
+    notify,
+    notificationMessage,
+    projectId, 
+    notificationType,`,  triggeredBy,
+    notify,
+    notificationMessage,
+    projectId, 
+    notificationType)
     const err = await notificationCreate.validateSync();
     if(!err) {
         const notificationDetails = await notificationCreate.save()
