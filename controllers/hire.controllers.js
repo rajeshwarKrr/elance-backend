@@ -1,6 +1,5 @@
-const { User, Project, Application } = require("../models");
-const { pagination, queryConditions } = require("../services/utility.service")
-const { setNotification } = require('../services/notification.service');
+const { Application } = require("../models");
+const { queryConditions } = require("../services/utility.service")
 const { hireAndRejectService, hireRequestService, getAllHireRequestsService, agreeRejectHireService, applyProjectService } = require("../services/hire.service");
 
 

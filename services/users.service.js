@@ -246,7 +246,7 @@ const setReviewService = async ({
     return ({
         reviewedBy: reviewerUpdate?.email,
         user,
-        notification: notification?._id,
+        notification,
         status: 200
     })
 
@@ -300,16 +300,6 @@ const setContactedService = async ({
         new: true
     }
     )
-
-
-    // const notification = await setNotification({
-    //     triggeredBy: senderUserUpdate._id,
-    //     notify: receiverUserUpdate._id,
-    //     notificationMessage: `${senderUserUpdate.userName} sent a message`,
-    //     notificationType: "message"
-    // })
-
-
 
     return ({
         status: 200,
