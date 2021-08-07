@@ -52,6 +52,7 @@ const applyProjectService = async (bodyArgs) => {
             notify: projectUpdate.postedBy,
             notificationMessage: `${projectUpdate.projectTitle} applied `,
             projectId: projectUpdate._id,
+            applicationId: applicationSave?._id,
             notificationType: "jobApplication"
         })
        
@@ -367,20 +368,21 @@ const remindJobApplicationService = async ({
     applicationId
 }) => {
     const application = await Application
-        .find({_id: applicationId})
+        .findOne({_id: applicationId})
         .populate("projectId")
-
     const notification = await setNotification({
         triggeredBy: application?.userId,
-        notify: application?.projectId?.postedBy,
-        notificationMessage: `reminder notification`, 
+        notify: application?.projectId.postedBy,
+        notificationMessage: `Reminder Notification for the Application`, 
         projectId:  application?.projectId?._id,
+        applicationId: application?._id,
         notificationType: "jobApplicationReminder"
     })
 
     return ({
         status: 200,
         message: "Reminder Notification Sent",
+        applicationId: application?._id,
         notification,
     })
 

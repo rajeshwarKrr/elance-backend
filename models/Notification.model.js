@@ -4,18 +4,24 @@ const notificationSchema = new mongoose.Schema({
     triggeredBy :{
         type: mongoose.Schema.ObjectId,
         ref: "user",
+        required: true,
     },
     notify :{
         type: mongoose.Schema.ObjectId,
         ref: "user",
+        required: true,
+
     }, 
     notificationMessage :{
         type: String,
-        req: true
+        req: true,
+        required: true,
+
     }, // project applied "project title " by "user name"
     isRead :{
         type: Boolean, 
         default: false,
+        required: true,
     },
     projectId: {
         type: mongoose.Schema.ObjectId,
@@ -24,6 +30,11 @@ const notificationSchema = new mongoose.Schema({
     hireRequestId: {
         type: mongoose.Schema.ObjectId,
         ref: "hireRequest",
+
+    },
+    applicationId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "application",
 
     },
     notificationType: {
