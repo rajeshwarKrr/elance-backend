@@ -52,6 +52,7 @@ const applyProjectService = async (bodyArgs) => {
             notify: projectUpdate.postedBy,
             notificationMessage: `${projectUpdate.projectTitle} applied `,
             projectId: projectUpdate._id,
+            applicationId: applicationSave?._id,
             notificationType: "jobApplication"
         })
        
