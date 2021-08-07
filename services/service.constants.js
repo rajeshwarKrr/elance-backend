@@ -4,7 +4,8 @@ const userSelect = {
     fullName: 1,
     firstName: 1,
     lastName: 1,
-    userType: 1
+    userType: 1,
+    createdAt: 1
 }
 
 const applicationSelect = {
@@ -13,6 +14,7 @@ const applicationSelect = {
     description: 1,
     bid: 1,
     applicationStatus: 1,
+    createdAt: 1
 }
 
 const projectSelect = {
@@ -26,7 +28,8 @@ const projectSelect = {
     duration: 1,
     visibility: 1,
     budget: 1,
-    postedBy: 1
+    postedBy: 1,
+    createdAt: 1
 }
 
 // generic search select constants
@@ -43,6 +46,7 @@ const userGenericSelect = {
     qualifications: 1,
     skills: 1,
     reviews: 1,
+    createdAt: 1
 }
 
 const projectGenericSelect = {
@@ -61,6 +65,7 @@ const projectGenericSelect = {
     favByUsers: 1,
     hireRequests: 1,
     hired: 1,
+    createdAt: 1
 }
 
 // end
